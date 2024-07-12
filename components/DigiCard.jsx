@@ -1,10 +1,15 @@
 import { useState } from 'react';
 import Navbar from './Navbar';
+import CustomModal from './CustomModal';
 
 export default function DigiCard({ currentUser, csrfToken }) {
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [authPopupVisible, setAuthPopupVisible] = useState(false);
     const [theme, setTheme] = useState('light-mode');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalMessage, setModalMessage] = useState('');
+    const [modalType, setModalType] = useState('success');
 
     const toggleTheme = () => {
         setTheme(prevTheme => {
@@ -38,7 +43,10 @@ export default function DigiCard({ currentUser, csrfToken }) {
                 }),
             });
             const data = await response.json();
-            alert(data.message);
+            setModalTitle(data.success ? 'Success' : 'Error');
+            setModalMessage(data.message);
+            setModalType(data.success ? 'success' : 'error');
+            setModalVisible(true);
             if (data.success && isLoginMode) {
                 window.location.href = '/create-card'; // Redirect to create card page after successful login
             } else {
@@ -46,13 +54,15 @@ export default function DigiCard({ currentUser, csrfToken }) {
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred. Please try again.');
+            setModalTitle('Error');
+            setModalMessage('An error occurred. Please try again.');
+            setModalType('error');
+            setModalVisible(true);
         }
     };
 
     return (
         <div className={`min-h-screen relative ${theme}`}>
-
             <div className=" -z-30 absolute top-0 rounded-full bg-violet-300 right-12 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
             <div className=" -z-30 absolute rounded-full bg-fuchsia-300 -bottom-24 left-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
             <div className="container mx-auto px-4 py-12 max-w-7xl sm:px-6 lg:px-24 lg:py-24">
@@ -117,14 +127,15 @@ export default function DigiCard({ currentUser, csrfToken }) {
                     </div>
                 </>
             )}
+
+            <CustomModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                title={modalTitle}
+                message={modalMessage}
+                type={modalType}
+            />
         </div>
     );
 }
-
-
-
-
-
-
-
 
