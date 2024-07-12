@@ -102,6 +102,7 @@ END:VCARD`;
 
     return (
         <div className="min-h-screen bg-gray-100 w-full p-4 flex flex-col items-center lg:px-20">
+
             <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
                 <div className="mb-6">
                     {card.logo ? (

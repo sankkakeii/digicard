@@ -34,7 +34,9 @@ export default function CardPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center">
+    <main className="flex relative min-h-screen flex-col items-center bg-gray-100s">
+                  <div className="absolute top-0 rounded-full bg-violet-300 -left-4 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+            <div className="absolute rounded-full bg-fuchsia-300 bottom-24 right-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
       <DigitalBusinessCard card={card} />
     </main>
   );
