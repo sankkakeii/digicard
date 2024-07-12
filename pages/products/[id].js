@@ -45,7 +45,6 @@ export default function ProductDetails() {
                         <div>
                             <div className="relative w-full max-w-lg">
                                 <div className="absolute top-0 rounded-full bg-violet-300 -left-4 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-
                                 <div className="absolute rounded-full bg-fuchsia-300 -bottom-24 right-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
                                 <div className="relative">
                                     <Image

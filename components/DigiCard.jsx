@@ -51,7 +51,10 @@ export default function DigiCard({ currentUser, csrfToken }) {
     };
 
     return (
-        <div className={`min-h-screen ${theme}`}>
+        <div className={`min-h-screen relative ${theme}`}>
+
+            <div className="absolute top-0 rounded-full bg-violet-300 right-12 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+            <div className="absolute rounded-full bg-fuchsia-300 -bottom-24 left-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
             <div className="container mx-auto px-4 py-12 max-w-7xl sm:px-6 lg:px-24 lg:py-24">
                 <Navbar currentUser={currentUser} showAuthPopup={showAuthPopup} />
 
