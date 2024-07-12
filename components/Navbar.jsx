@@ -7,7 +7,7 @@ export default function Navbar({ currentUser, showAuthPopup }) {
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
     return (
-        <header className="bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 absolute">
+        <header className="bg-gray-800 rounded-lg hover:shadow-xl text-white z-50">
             <div className="container mx-auto flex justify-between items-center py-4 px-4">
                 <h1 className="text-2xl font-bold">3wc DigiCard</h1>
                 <div className="md:hidden">
