@@ -63,39 +63,45 @@ export default function DigiCard({ currentUser, csrfToken }) {
 
     return (
         <>
-            <div className={`min-h-screen relative ${theme}`}>
+            <div className={`h-screen relative`}>
                 <div className=" -z-30 absolute top-0 rounded-full bg-violet-300 right-12 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
                 <div className=" -z-30 absolute rounded-full bg-fuchsia-300 -bottom-24 left-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-                <div className="container mx-auto px-4 py-12 max-w-7xl sm:px-6 lg:px-24 lg:py-24">
+                <div className="container mx-auto px-4 py-4 max-w-7xl sm:px-6 lg:px-24">
                     <Navbar currentUser={currentUser} showAuthPopup={showAuthPopup} />
 
-                    <main className="text-center my-16">
-                        <h2 className="text-4xl font-bold mb-8">Create Your Own Digital Business Card</h2>
+                    <main className="text-center my-8">
+                        <h2 className="text-4xl font-bold mb-8">Create Your Own Digital Business</h2>
                         <p className="text-lg mb-12 text-gray-600">Showcase your brand, connect instantly with a tap and generate profitable leads.</p>
                         {!currentUser && (
-                            <button
-                                onClick={() => showAuthPopup(true)}
-                                className="px-8 py-4 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none"
-                            >
-                                Get Started
-                            </button>
+                            <div onClick={() => showAuthPopup(true)} class="relative inline-flex items-center justify-center gap-4 group">
+                                <div
+                                    class="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200">
+                                </div>
+                                <p title="Get Started"
+                                    class="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                                    role="button">Get Started<svg class="mt-0.5 ml-2 -mr-1 stroke-white stroke-2" fill="none" width="10"
+                                        height="10" viewBox="0 0 10 10" aria-hidden="true">
+                                        <path class="transition opacity-0 group-hover:opacity-100" d="M0 5h7"></path>
+                                        <path class="transition group-hover:translate-x-[3px]" d="M1 1l4 4-4 4"></path>
+                                    </svg>
+                                </p>
+                            </div>
                         )}
                     </main>
 
                     <section>
-                        <h3 className="text-3xl font-semibold mb-8">Key Features</h3>
                         <div className="flex flex-wrap justify-around">
                             <div className="flex-1 max-w-xs bg-gray-100 p-6 m-2 rounded-lg shadow">
-                                <h4 className="text-xl font-bold mb-2">Customizable Templates</h4>
-                                <p>Choose from a variety of professional designs or create your own unique layout.</p>
+                                <h4 className="text-xl font-semibold text-blue-600 mb-4">Unlock Osun&apos;s Potential</h4>
+                                <p>Embark on your digital entrepreneurship journey with our carefully curated selection of customizable templates. Designed specifically to empower the creative minds of Osun State, our platform aims to fuel your success and drive economic prosperity throughout our thriving community.</p>
                             </div>
                             <div className="flex-1 max-w-xs bg-gray-100 p-6 m-2 rounded-lg shadow">
-                                <h4 className="text-xl font-bold mb-2">Interactive Elements</h4>
-                                <p>Add clickable links, contact buttons, and social media profiles to engage your audience.</p>
+                                <h4 className="text-xl font-semibold text-blue-600 mb-4">Interactive Elements</h4>
+                                <p>Add clickable links, contact buttons, and social media profiles to engage your audience. Create a dynamic digital presence that represents your brand and facilitates meaningful connections.</p>
                             </div>
                             <div className="flex-1 max-w-xs bg-gray-100 p-6 m-2 rounded-lg shadow">
-                                <h4 className="text-xl font-bold mb-2">Easy Sharing</h4>
-                                <p>Share your digital card via QR code, email, or direct link with just a few clicks.</p>
+                                <h4 className="text-xl font-semibold text-blue-600 mb-4">Easy Sharing</h4>
+                                <p>Share your digital card via QR code, email, or direct link with just a few clicks. Expand your reach and make networking effortless in today&apos;s fast-paced digital landscape.</p>
                             </div>
                         </div>
                     </section>

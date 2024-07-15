@@ -7,9 +7,12 @@ export default function Navbar({ currentUser, showAuthPopup }) {
     const toggleMenu = () => setMenuOpen(!menuOpen);
 
     return (
-        <header className="bg-gray-800 rounded-lg hover:shadow-xl text-white z-50">
-            <div className="container mx-auto flex justify-between items-center py-4 px-4">
-                <h1 className="text-2xl font-bold">3wc DigiCard</h1>
+        <header className="bg-gray-100 rounded-lg relative inline-flex w-full text-blue-500 z-50">
+            <div
+                class="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200">
+            </div>
+            <div className="container mx-auto justify-between items-center py-4 px-4 group relative inline-flex text-base rounded-xl bg-gray-100 font-semiboldtransition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-400/30">
+                <h1 className="text-2xl font-bold">Digital Osun Hub</h1>
                 <div className="md:hidden">
                     <button
                         onClick={toggleMenu}
@@ -33,7 +36,7 @@ export default function Navbar({ currentUser, showAuthPopup }) {
                         </>
                     ) : (
                         <>
-                            <button onClick={() => { showAuthPopup(true); }} className="px-4 py-2 text-white bg-yellow-400 rounded-lg shadow hover:bg-yellow-500">Login</button>
+                            <button onClick={() => { showAuthPopup(true); }} className="px-4 py-2 text-blue-500 bg-none rounded-lg border border-blue-500 shadow hover:bg-blue-200">Login</button>
                             <button onClick={() => { showAuthPopup(false); }} className="px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">Register</button>
                         </>
                     )}
@@ -61,7 +64,7 @@ export default function Navbar({ currentUser, showAuthPopup }) {
                                 </>
                             ) : (
                                 <>
-                                    <button onClick={() => { showAuthPopup(true); }} className="px-4 py-2 text-white bg-yellow-400 rounded-lg shadow hover:bg-yellow-500">Login</button>
+                                    <button onClick={() => { showAuthPopup(true); }} className="px-4 py-2 text-blue-500 bg-none rounded-lg border border-blue-500 shadow hover:bg-blue-200">Login</button>
                                     <button onClick={() => { showAuthPopup(false); }} className="px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700">Register</button>
                                 </>
                             )}

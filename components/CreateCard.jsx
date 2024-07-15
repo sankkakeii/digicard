@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import QRCode from 'qrcode.react';
 import CustomModal from './CustomModal';
+import Link from 'next/link';
 
 export default function CreateCard({ csrfToken }) {
     const [formState, setFormState] = useState({
@@ -190,8 +191,13 @@ export default function CreateCard({ csrfToken }) {
         <>
             <div className="container mx-auto p-5 flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
                 {/* Form Section */}
-                <div className="flex-1 lg:pr-5 mb-5 lg:mb-0">
-                    <h1 className="text-3xl mb-6 font-semibold text-gray-700">Create Your Digital Business Card</h1>
+                <div className="flex-1 lg:pr-5 mb-5 lg:mb-0  ">
+                    <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
+                        <h1 className="text-3xl font-semibold">Create Your Digital Business Card</h1>
+                        <ul>
+                            <li className="hover:text-green-500"><Link href={'/'}>Home</Link> </li>
+                        </ul>
+                    </div>
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <input type="hidden" name="csrf_token" value={csrfToken} />
                         {/* Personal Information */}
@@ -388,97 +394,97 @@ export default function CreateCard({ csrfToken }) {
                         </button>
                     </form>
                 </div>
-                {/* Preview Section */}
-                <div className="flex-1 lg:border-l-2 lg:pl-5">
-                    <h2 className="text-2xl font-semibold mb-4 text-gray-700">Preview</h2>
-                    <div className="bg-white rounded-lg shadow-lg p-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <div>
-                                <h3 className="text-xl font-semibold text-gray-800">{previewData.firstName} {previewData.lastName}</h3>
-                                <p className="text-gray-600">{previewData.jobTitle}</p>
-                            </div>
-                            <div className="w-16 h-16">
-                                {previewData.profilePicture ? (
-                                    <Image
-                                        src={previewData.profilePicture}
-                                        alt={`${previewData.firstName}'s Profile Picture`}
-                                        layout="responsive"
-                                        width={64}
-                                        height={64}
-                                        className="rounded-full"
-                                    />
-                                ) : (
-                                    <div className="bg-gray-200 w-full h-full rounded-full"></div>
-                                )}
-                            </div>
-                        </div>
-                        <hr className="my-4" />
-                        <div className="mb-4">
-                            {previewData.logo && (
-                                <div className="w-full mb-4">
-                                    <Image
-                                        src={previewData.logo}
-                                        alt="Business Logo"
-                                        layout="responsive"
-                                        width={200}
-                                        height={100}
-                                        className="object-contain"
-                                    />
-                                </div>
-                            )}
-                            <div>
-                                <p className="text-gray-700 mb-2">
-                                    <strong>Email:</strong> {previewData.email}
-                                </p>
-                                <p className="text-gray-700 mb-2">
-                                    <strong>Phone:</strong> {previewData.phone}
-                                </p>
-                                {previewData.socialMedia.length > 0 && (
-                                    <>
-                                        <p className="text-gray-700 mb-2"><strong>Social Media:</strong></p>
-                                        <ul className="mb-2">
-                                            {previewData.socialMedia.map((entry, index) => (
-                                                <li key={index} className="text-blue-500 mb-1">
-                                                    <a href={entry.url} target="_blank" rel="noopener noreferrer">
-                                                        {entry.platform}
-                                                    </a>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </>
-                                )}
-                                {previewData.products.length > 0 && (
-                                    <>
-                                        <p className="text-gray-700 mb-2"><strong>Products:</strong></p>
-                                        <ul className="mb-2">
-                                            {previewData.products.map((entry, index) => (
-                                                <li key={index} className="text-blue-500 mb-1">
-                                                    <a href={entry.url} target="_blank" rel="noopener noreferrer">
-                                                        {entry.name}
-                                                    </a>
-                                                    <p className="text-gray-600">{entry.description}</p>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-                        <div className="flex justify-end">
-                            {cardId && (
-                                <div className="flex gap-5 items-center">
-                                    <QRCode value={`${window.location.origin}/cards/${cardId}`} />
-                                    <button
-                                        onClick={handleCopyLink}
-                                        className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
-                                    >
-                                        Copy Link
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    </div>
+{/* Preview Section */}
+<div className="flex-1 lg:border-l-2 lg:pl-5">
+    <h2 className="text-2xl font-semibold mb-4 text-gray-700">Preview</h2>
+    <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="flex items-center justify-between mb-4">
+            <div>
+                <h3 className="text-xl font-semibold text-gray-800">{previewData.firstName} {previewData.lastName}</h3>
+                <p className="text-gray-600">{previewData.jobTitle}</p>
+            </div>
+            <div className="w-16 h-16">
+                {previewData.profilePicture ? (
+                    <Image
+                        src={previewData.profilePicture}
+                        alt={`${previewData.firstName}'s Profile Picture`}
+                        layout="responsive"
+                        width={64}
+                        height={64}
+                        className="rounded-full"
+                    />
+                ) : (
+                    <div className="bg-gray-200 w-full h-full rounded-full"></div>
+                )}
+            </div>
+        </div>
+        <hr className="my-4" />
+        <div className="mb-4">
+            {previewData.logo && (
+                <div className="w-full mb-4">
+                    <Image
+                        src={previewData.logo}
+                        alt="Business Logo"
+                        layout="responsive"
+                        width={200}
+                        height={100}
+                        className="object-contain"
+                    />
                 </div>
+            )}
+            <div>
+                <p className="text-gray-700 mb-2">
+                    <strong>Email:</strong> {previewData.email}
+                </p>
+                <p className="text-gray-700 mb-2">
+                    <strong>Phone:</strong> {previewData.phone}
+                </p>
+                {previewData.socialMedia.length > 0 && (
+                    <>
+                        <p className="text-gray-700 mb-2"><strong>Social Media:</strong></p>
+                        <ul className="mb-2">
+                            {previewData.socialMedia.map((entry, index) => (
+                                <li key={index} className="text-blue-500 mb-1">
+                                    <a href={entry.url} target="_blank" rel="noopener noreferrer">
+                                        {entry.platform}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+                {previewData.products.length > 0 && (
+                    <>
+                        <p className="text-gray-700 mb-2"><strong>Products:</strong></p>
+                        <ul className="mb-2">
+                            {previewData.products.map((entry, index) => (
+                                <li key={index} className="text-blue-500 mb-1">
+                                    <a href={entry.url} target="_blank" rel="noopener noreferrer">
+                                        {entry.name}
+                                    </a>
+                                    <p className="text-gray-600">{entry.description}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )}
+            </div>
+        </div>
+        <div className="flex justify-end">
+            {cardId && (
+                <div className="flex gap-5 items-center">
+                    <QRCode value={`${window.location.origin}/cards/${cardId}`} />
+                    <button
+                        onClick={handleCopyLink}
+                        className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
+                    >
+                        Copy Link
+                    </button>
+                </div>
+            )}
+        </div>
+    </div>
+</div>
             </div>
             <CustomModal
                 visible={modalVisible}

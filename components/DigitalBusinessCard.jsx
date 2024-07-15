@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Navbar from './Navbar';
+import Link from 'next/link';
+import { FaFileDownload, FaShare } from 'react-icons/fa';
 
 export default function DigitalBusinessCard({ card }) {
     const [activeSection, setActiveSection] = useState('about');
@@ -45,7 +47,32 @@ END:VCARD`;
     const renderSectionContent = () => {
         switch (activeSection) {
             case 'about':
-                return <div>{card.about_me}</div>;
+                return <div>
+                    {card.about_me}
+                    <div className="flex w-full justify-evenly p-4 items-center">
+                        <div className="w-3/4">
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-2">{card.first_name} {card.last_name}</h2>
+                            <h2 className="text-lg font-semibold text-gray-600 mb-2">Product Designer</h2>
+                        </div>
+                        <Image
+                            src={`data:image/jpeg;base64,${card.profile_picture}`}
+                            width={60}
+                            height={60}
+                            alt="Profile Picture"
+                            className="rounded-full object-cover mx-auto"
+                        />
+                    </div>
+                    <div className="w-full bg-blue-500 h-[1.2px] my-2"></div>
+
+                    <h2 className="text-xl font-semibold text-gray-800 mb-2">Skills</h2>
+
+                    <ul>
+                        <li>Content Creation</li>
+                        <li>Adobe XD</li>
+                        <li>Figma</li>
+                        <li>Excel</li>
+                    </ul>
+                </div>;
             case 'products':
                 return (
                     <div className="mb-6">
@@ -80,7 +107,21 @@ END:VCARD`;
                 );
             case 'contact':
                 return (
+
                     <div className="mb-6">
+                        <div className="flex w-full justify-evenly p-4 items-center">
+                            <div className="w-3/4">
+                                <h2 className="text-lg font-semibold text-gray-600 mb-2">You Can Contact <span className="text-green-500">{card.first_name}</span> Here</h2>
+                            </div>
+                            <Image
+                                src={`data:image/jpeg;base64,${card.profile_picture}`}
+                                width={60}
+                                height={60}
+                                alt="Profile Picture"
+                                className="rounded-full object-cover mx-auto"
+                            />
+                        </div>
+                        <div className="w-full bg-blue-500 h-[1.2px] my-2"></div>
                         {card.email && (
                             <p className="flex items-center mb-2">
                                 <i className="fas fa-envelope mr-2"></i>
@@ -103,17 +144,27 @@ END:VCARD`;
     return (
         <div className="min-h-screen bg-gray-100 w-full p-4 flex flex-col items-center lg:px-20">
 
+            <div className="w-1/2 flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
+                <h1 className="text-3xl font-semibold">Hi there!, I&apos;m <span className="text-green-500">{card.first_name}</span></h1>
+                <ul>
+                    <li className="hover:text-green-500"><Link href={'/'}>Home</Link> </li>
+                </ul>
+            </div>
+
             <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
+
                 <div className="mb-6">
-                    {card.logo ? (
-                        <Image
-                            src={`data:image/jpeg;base64,${card.logo}`}
-                            width={70}
-                            height={70}
-                            alt="Business Logo"
-                            className="object-contain mb-4 mx-auto rounded-full"
-                        />
-                    ) : null}
+                    <div className="relative w-full h-64 mb-4 mx-auto">
+                        {card.logo ? (
+                            <Image
+                                src={`data:image/jpeg;base64,${card.logo}`}
+                                layout="fill"
+                                objectFit="cover"
+                                alt="Business Logo"
+                                className="object-cover rounded-lg w-full"
+                            />
+                        ) : null}
+                    </div>
                     {card.profile_picture ? (
                         <Image
                             src={`data:image/jpeg;base64,${card.profile_picture}`}
@@ -128,6 +179,7 @@ END:VCARD`;
                         </div>
                     )}
                 </div>
+
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">{card.first_name} {card.last_name}</h1>
                 <p className="text-lg text-gray-600 mb-4">{card.job_title}</p>
             </div>
@@ -164,13 +216,13 @@ END:VCARD`;
                     onClick={downloadVCard}
                     className="m-2 p-2 bg-blue-600 text-white rounded transition duration-300 hover:bg-blue-700 flex items-center justify-center"
                 >
-                    <i className="fas fa-download mr-2"></i>Download vCard
+                    <i className="fas fa-download mr-2"></i><FaFileDownload className="mr-2" /> Download vCard
                 </button>
                 <button
                     onClick={shareCard}
                     className="m-2 p-2 bg-blue-600 text-white rounded transition duration-300 hover:bg-blue-700 flex items-center justify-center"
                 >
-                    <i className="fas fa-share-alt mr-2"></i>Share
+                    <i className="fas fa-share-alt mr-2"></i> <FaShare className="mr-2" />Share
                 </button>
             </div>
         </div>
