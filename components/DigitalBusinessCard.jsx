@@ -182,6 +182,28 @@ END:VCARD`;
 
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">{card.first_name} {card.last_name}</h1>
                 <p className="text-lg text-gray-600 mb-4">{card.job_title}</p>
+                <div className="mt-6 flex flex-col w-full items-center justify-center lg:flex-row gap-4">
+                    <div className="flex flex-col items-center justify-center">
+                        <button
+                            onClick={downloadVCard}
+                            className="m-2 p-2 bg-blue-500 text-white rounded transition duration-300 hover:bg-blue-700 flex items-center justify-center"
+                        >
+                            <i className="fas fa-download mr-2"></i><FaFileDownload className="mr-2" />
+                        </button>
+                        Download
+                    </div>
+
+
+                    <div className="flex flex-col items-center justify-center">
+                    <button
+                        onClick={shareCard}
+                        className="m-2 p-2 bg-blue-500 text-white rounded transition duration-300 hover:bg-blue-700 flex items-center justify-center"
+                    >
+                        <i className="fas fa-share-alt mr-2"></i> <FaShare className="mr-2" />
+                    </button>
+                    Share
+                    </div>
+                </div>
             </div>
             <div className="flex flex-col lg:flex-row w-full max-w-4xl">
                 <div className="w-full lg:w-1/4 bg-white rounded-xl shadow-lg p-6 mb-4 lg:mb-0">
@@ -210,20 +232,6 @@ END:VCARD`;
                 <div className="w-full lg:w-3/4 bg-white rounded-xl shadow-lg p-6 lg:ml-4">
                     {renderSectionContent()}
                 </div>
-            </div>
-            <div className="mt-6 flex flex-col lg:flex-row gap-4">
-                <button
-                    onClick={downloadVCard}
-                    className="m-2 p-2 bg-blue-600 text-white rounded transition duration-300 hover:bg-blue-700 flex items-center justify-center"
-                >
-                    <i className="fas fa-download mr-2"></i><FaFileDownload className="mr-2" /> Download vCard
-                </button>
-                <button
-                    onClick={shareCard}
-                    className="m-2 p-2 bg-blue-600 text-white rounded transition duration-300 hover:bg-blue-700 flex items-center justify-center"
-                >
-                    <i className="fas fa-share-alt mr-2"></i> <FaShare className="mr-2" />Share
-                </button>
             </div>
         </div>
     );

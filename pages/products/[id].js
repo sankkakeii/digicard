@@ -1,6 +1,7 @@
 import NotFound from '@/components/NotFound';
 import Spinner from '@/components/Spinner';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -42,6 +43,12 @@ export default function ProductDetails() {
     return (
         <div className="bg-gray-100 min-h-screen">
             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
+            <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
+                <h1 className="text-3xl font-semibold">Market Your Business Here</h1>
+                <ul>
+                    <li className="hover:text-green-500"><Link href={'/'}>Home</Link> </li>
+                </ul>
+            </div>
                 <div className="flex flex-wrap items-center mx-auto max-w-7xl">
                     <div className="w-full lg:max-w-lg lg:w-1/2 rounded-xl">
                         <div>

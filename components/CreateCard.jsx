@@ -3,6 +3,8 @@ import Image from 'next/image';
 import QRCode from 'qrcode.react';
 import CustomModal from './CustomModal';
 import Link from 'next/link';
+import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+
 
 export default function CreateCard({ csrfToken }) {
     const [formState, setFormState] = useState({
@@ -28,6 +30,13 @@ export default function CreateCard({ csrfToken }) {
         socialMedia: [],
         products: [],
     });
+
+    const iconMap = {
+        Facebook: FaFacebook,
+        Instagram: FaInstagram,
+        Twitter: FaTwitter,
+        LinkedIn: FaLinkedin,
+    };
 
     const [cardId, setCardId] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
@@ -446,20 +455,42 @@ export default function CreateCard({ csrfToken }) {
                                 <p className="text-gray-700 mb-2">
                                     <strong>Phone:</strong> {previewData.phone}
                                 </p>
+
                                 {previewData.socialMedia.length > 0 && (
                                     <>
                                         <p className="text-gray-700 mb-2"><strong>Social Media:</strong></p>
-                                        <ul className="mb-2">
-                                            {previewData.socialMedia.map((entry, index) => (
-                                                <li key={index} className="text-blue-500 mb-1">
-                                                    <a href={entry.url} target="_blank" rel="noopener noreferrer">
-                                                        {entry.platform}
-                                                    </a>
-                                                </li>
-                                            ))}
+                                        <ul className="flex space-x-4 mb-2">
+                                            {previewData.socialMedia.map((entry, index) => {
+                                                let Icon;
+                                                switch (entry.platform) {
+                                                    case 'Facebook':
+                                                        Icon = FaFacebook;
+                                                        break;
+                                                    case 'Instagram':
+                                                        Icon = FaInstagram;
+                                                        break;
+                                                    case 'Twitter':
+                                                        Icon = FaTwitter;
+                                                        break;
+                                                    case 'LinkedIn':
+                                                        Icon = FaLinkedin;
+                                                        break;
+                                                    default:
+                                                        Icon = null;
+                                                }
+                                                return (
+                                                    <li key={index} className="text-blue-500">
+                                                        <a href={entry.url} target="_blank" rel="noopener noreferrer">
+                                                            {Icon && <Icon size={24} />}
+                                                        </a>
+                                                    </li>
+                                                );
+                                            })}
                                         </ul>
                                     </>
                                 )}
+
+
                                 {previewData.products.length > 0 && (
                                     <>
                                         <p className="text-gray-700 mb-2"><strong>Products:</strong></p>
