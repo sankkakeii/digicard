@@ -1,3 +1,5 @@
+import NotFound from '@/components/NotFound';
+import Spinner from '@/components/Spinner';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -30,11 +32,11 @@ export default function ProductDetails() {
     }, [id]);
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+        return <Spinner />;
     }
 
     if (!product) {
-        return <div className="min-h-screen flex items-center justify-center">Product not found</div>;
+        return <NotFound />
     }
 
     return (

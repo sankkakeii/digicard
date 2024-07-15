@@ -1,13 +1,17 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import DigitalBusinessCard from '@/components/DigitalBusinessCard';
+import NotFound from '@/components/NotFound';
+import Spinner from '@/components/Spinner';
 
 export default function CardPage() {
   const router = useRouter();
   const { id } = router.query;
   const [card, setCard] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
+    setLoading(true); // Set loading to true when fetching data
     console.log('Router query:', router.query);
     console.log('Card ID:', id);
 
@@ -25,12 +29,17 @@ export default function CardPage() {
         .catch((error) => {
           console.error('Error fetching card data:', error);
           setCard(null);
-        });
+        })
+        .finally(() => setLoading(false)); // Set loading to false after fetching data
     }
   }, [id]);
 
+  if (loading) {
+    return <Spinner />; // Display loading text while fetching data
+  }
+
   if (!card) {
-    return <div>Card not found</div>;
+    return <NotFound />;
   }
 
   return (
