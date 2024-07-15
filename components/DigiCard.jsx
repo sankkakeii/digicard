@@ -64,8 +64,8 @@ export default function DigiCard({ currentUser, csrfToken }) {
     return (
         <>
             <div className={`h-screen relative`}>
-                <div className=" -z-30 absolute top-0 rounded-full bg-violet-300 right-12 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-                <div className=" -z-30 absolute rounded-full bg-fuchsia-300 -bottom-24 left-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+                <div className="-z-30 absolute top-0 rounded-full bg-violet-300 right-12 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+                <div className="-z-30 absolute rounded-full bg-fuchsia-300 -bottom-24 left-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
                 <div className="container mx-auto px-4 py-4 max-w-7xl sm:px-6 lg:px-24">
                     <Navbar currentUser={currentUser} showAuthPopup={showAuthPopup} />
 

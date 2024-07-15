@@ -479,9 +479,9 @@ export default function CreateCard({ csrfToken }) {
                                                         Icon = null;
                                                 }
                                                 return (
-                                                    <li key={index} className="text-blue-500">
+                                                    <li key={index} className="text-gray-800">
                                                         <a href={entry.url} target="_blank" rel="noopener noreferrer">
-                                                            {Icon && <Icon size={24} />}
+                                                            {Icon && <Icon size={40} />}
                                                         </a>
                                                     </li>
                                                 );

@@ -41,7 +41,7 @@ export default function ProductDetails() {
     }
 
     return (
-        <div className="bg-gray-100 min-h-screen">
+        <div className="min-h-screen">
             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
             <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
                 <h1 className="text-3xl font-semibold">Market Your Business Here</h1>
