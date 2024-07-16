@@ -40,6 +40,11 @@ export default function DigiCard({ currentUser, csrfToken }) {
                 body: JSON.stringify({
                     username: formData.get('username'),
                     password: formData.get('password'),
+                    firstname: !isLoginMode ? formData.get('firstname') : undefined,
+                    lastname: !isLoginMode ? formData.get('lastname') : undefined,
+                    email: !isLoginMode ? formData.get('email') : undefined,
+                    phone: !isLoginMode ? formData.get('phone') : undefined,
+                    address: !isLoginMode ? formData.get('address') : undefined,
                 }),
             });
             const data = await response.json();
@@ -73,16 +78,16 @@ export default function DigiCard({ currentUser, csrfToken }) {
                         <h2 className="text-4xl font-bold mb-8">Create Your Own Digital Business</h2>
                         <p className="text-lg mb-12 text-gray-600">Showcase your brand, connect instantly with a tap and generate profitable leads.</p>
                         {!currentUser && (
-                            <div onClick={() => showAuthPopup(true)} class="relative inline-flex items-center justify-center gap-4 group">
+                            <div onClick={() => showAuthPopup(true)} className="relative inline-flex items-center justify-center gap-4 group">
                                 <div
-                                    class="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200">
+                                    className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200">
                                 </div>
                                 <p title="Get Started"
-                                    class="group relative inline-flex items-center justify-center text-base rounded-xl bg-blue-500 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-blue-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
-                                    role="button">Get Started<svg class="mt-0.5 ml-2 -mr-1 stroke-white stroke-2" fill="none" width="10"
+                                    className="group relative inline-flex items-center justify-center text-base rounded-xl bg-blue-500 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-blue-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                                    role="button">Get Started<svg className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2" fill="none" width="10"
                                         height="10" viewBox="0 0 10 10" aria-hidden="true">
-                                        <path class="transition opacity-0 group-hover:opacity-100" d="M0 5h7"></path>
-                                        <path class="transition group-hover:translate-x-[3px]" d="M1 1l4 4-4 4"></path>
+                                        <path className="transition opacity-0 group-hover:opacity-100" d="M0 5h7"></path>
+                                        <path className="transition group-hover:translate-x-[3px]" d="M1 1l4 4-4 4"></path>
                                     </svg>
                                 </p>
                             </div>
@@ -114,7 +119,7 @@ export default function DigiCard({ currentUser, csrfToken }) {
                 {authPopupVisible && (
                     <>
                         <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={hideAuthPopup}></div>
-                        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg z-50">
+                        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-1/4 p-8 rounded-lg shadow-lg z-50">
                             <h2 className="text-xl font-semibold mb-4">{isLoginMode ? 'Login' : 'Register'}</h2>
                             <form onSubmit={handleSubmit}>
                                 <input type="hidden" name="csrf_token" value={csrfToken} />
@@ -126,6 +131,31 @@ export default function DigiCard({ currentUser, csrfToken }) {
                                     <label htmlFor="password" className="block text-sm font-medium mb-1">Password:</label>
                                     <input type="password" id="password" name="password" required className="w-full px-3 py-2 border rounded" />
                                 </div>
+                                {!isLoginMode && (
+                                    <>
+                                        <div className="mb-4">
+                                            <label htmlFor="firstname" className="block text-sm font-medium mb-1">FirstName:</label>
+                                            <input type="text" id="firstname" name="firstname" required className="w-full px-3 py-2 border rounded" />
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <label htmlFor="lastname" className="block text-sm font-medium mb-1">LastName:</label>
+                                            <input type="lastname" id="lastname" name="lastname" required className="w-full px-3 py-2 border rounded" />
+                                        </div>
+                                        <div className="mb-4">
+                                            <label htmlFor="email" className="block text-sm font-medium mb-1">Email:</label>
+                                            <input type="email" id="email" name="email" required className="w-full px-3 py-2 border rounded" />
+                                        </div>
+                                        <div className="mb-4">
+                                            <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone Number:</label>
+                                            <input type="tel" id="phone" name="phone" required className="w-full px-3 py-2 border rounded" />
+                                        </div>
+                                        <div className="mb-4">
+                                            <label htmlFor="address" className="block text-sm font-medium mb-1">Address:</label>
+                                            <input type="text" id="address" name="address" required className="w-full px-3 py-2 border rounded" />
+                                        </div>
+                                    </>
+                                )}
                                 <button type="submit" className="w-full px-4 py-2 text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 focus:outline-none">Submit</button>
                             </form>
                             <div className="text-center mt-4">

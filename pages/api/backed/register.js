@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     await sequelize.sync(); // Ensure the database is synchronized
 
     if (req.method === 'POST') {
-        const { username, password } = req.body;
+        const { username, password, firstname, lastname, email, phone, address } = req.body;
 
         try {
             const existingUser = await User.findOne({ where: { username } });
@@ -14,7 +14,15 @@ export default async function handler(req, res) {
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
-            await User.create({ username, password: hashedPassword });
+            await User.create({
+                username,
+                password: hashedPassword,
+                firstname,
+                lastname,
+                email,
+                phone,
+                address,
+            });
 
             res.status(200).json({ success: true, message: 'Registration successful' });
         } catch (error) {

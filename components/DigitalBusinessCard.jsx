@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import Navbar from './Navbar';
 import Link from 'next/link';
 import { FaFileDownload, FaShare, FaEnvelope, FaPhone, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
 
@@ -54,7 +53,7 @@ END:VCARD`;
                         <div className="flex w-full justify-evenly p-4 items-center">
                             <div className="w-3/4">
                                 <h2 className="text-2xl font-semibold text-gray-800 mb-2">{card.first_name} {card.last_name}</h2>
-                                <h2 className="text-lg font-semibold text-gray-600 mb-2">Product Designer</h2>
+                                <h2 className="text-lg font-semibold text-gray-600 mb-2">{card.job_title}</h2>
                             </div>
                             <Image
                                 src={`data:image/jpeg;base64,${card.profile_picture}`}
@@ -69,10 +68,10 @@ END:VCARD`;
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">Skills</h2>
 
                         <ul>
-                            <li>Content Creation</li>
-                            <li>Adobe XD</li>
-                            <li>Figma</li>
-                            <li>Excel</li>
+                            <li>Land Scaping</li>
+                            <li>3d Mapping</li>
+                            {/* <li>Figma</li>
+                            <li>Excel</li> */}
                         </ul>
                     </div>
                 );
