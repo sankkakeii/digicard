@@ -1,23 +1,187 @@
+// import NotFound from '@/components/NotFound';
+// import Spinner from '@/components/Spinner';
+// import Image from 'next/image';
+// import Link from 'next/link';
+// import { useRouter } from 'next/router';
+// import { useEffect, useState } from 'react';
+
+// export default function ProductDetails() {
+//     const router = useRouter();
+//     const { id } = router.query;
+//     const [product, setProduct] = useState(null);
+//     const [loading, setLoading] = useState(true);
+//     const [selectedPackage, setSelectedPackage] = useState('Basic');
+
+//     const demoPrice = 400
+
+//     useEffect(() => {
+//         if (id) {
+//             fetch(`/api/backed/products/${id}`)
+//                 .then((response) => response.json())
+//                 .then((data) => {
+//                     if (data.success) {
+//                         setProduct(data.product);
+//                     } else {
+//                         console.log(data.message);
+//                         setProduct(null);
+//                     }
+//                     setLoading(false);
+//                 })
+//                 .catch((error) => {
+//                     console.error('Error fetching product data:', error);
+//                     setProduct(null);
+//                     setLoading(false);
+//                 });
+//         }
+//     }, [id]);
+
+//     if (loading) {
+//         return <Spinner />;
+//     }
+
+//     if (!product) {
+//         return <NotFound />;
+//     }
+
+//     return (
+//         <div className="min-h-screen">
+//             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
+//                 <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
+//                     <h1 className="text-3xl font-semibold">{product.name}</h1>
+//                     <ul>
+//                         <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+//                     </ul>
+//                 </div>
+
+//                 <div className="container mx-auto p-4">
+//                     <div className="flex items-center mb-4">
+//                         <div>
+//                             <h2 className="font-semibold">{product.name}</h2>
+//                             <div className="flex items-center">
+//                                 <span className="text-yellow-400">★★★★★</span>
+//                                 <span className="ml-1 text-gray-600">(5.0)</span>
+//                             </div>
+//                         </div>
+//                     </div>
+
+//                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+//                         <div>
+//                             <Image src={'/digicard-business.png'} width={500} height={500} alt={product.name} className="w-full rounded-lg mb-4" />
+//                             <div className="grid grid-cols-5 gap-2">
+//                                 {[...Array(5)].map((_, i) => (
+//                                     <Image key={i} src={'/digicard-business.png'} width={100} height={100} alt={`Thumbnail ${i + 1}`} className="w-full rounded" />
+//                                 ))}
+//                             </div>
+//                         </div>
+
+//                         <div>
+//                             <div className="bg-white rounded-lg shadow p-6">
+//                                 <div className="flex justify-between mb-4">
+//                                     <button
+//                                         className={`px-4 py-2 rounded ${selectedPackage === 'Basic' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+//                                         onClick={() => setSelectedPackage('Basic')}
+//                                     >
+//                                         Basic
+//                                     </button>
+//                                     <button
+//                                         className={`px-4 py-2 rounded ${selectedPackage === 'Standard' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+//                                         onClick={() => setSelectedPackage('Standard')}
+//                                     >
+//                                         Standard
+//                                     </button>
+//                                     <button
+//                                         className={`px-4 py-2 rounded ${selectedPackage === 'Premium' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+//                                         onClick={() => setSelectedPackage('Premium')}
+//                                     >
+//                                         Premium
+//                                     </button>
+//                                 </div>
+
+//                                 <h3 className="text-2xl font-bold mb-2">${demoPrice}</h3>
+//                                 <p className="text-sm text-gray-600 mb-4">Save up to 10% with Subscribe to Save</p>
+
+//                                 <h4 className="font-semibold mb-2">{selectedPackage}: Simple Illustration/Portrait</h4>
+//                                 <ul className="space-y-2 mb-4">
+//                                     <li className="flex items-center">
+//                                         <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+//                                         7-day delivery
+//                                     </li>
+//                                     <li className="flex items-center">
+//                                         <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+//                                         1 concept
+//                                     </li>
+//                                 </ul>
+
+//                                 <button className="w-full bg-black text-white py-3 rounded-lg font-semibold mb-4">
+//                                     Continue
+//                                 </button>
+
+//                                 <button className="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold">
+//                                     Contact me
+//                                 </button>
+//                             </div>
+//                         </div>
+//                     </div>
+
+//                     <div className="mt-8">
+//                         <h2 className="text-2xl font-bold mb-4">About this product</h2>
+//                         <p className="text-gray-700 mb-4">{product.description}</p>
+//                         <ul className="list-disc pl-5 text-gray-700 mb-4">
+//                             <li>You are free to choose the colors, background, and posture of the character(s)</li>
+//                             <li>JPEG + PNG files (+background)</li>
+//                             <li>Source file (Premium package)</li>
+//                             <li>100% Hand drawn digital illustration</li>
+//                             <li>High quality image 3000 x 4000 pixels 300 dpi</li>
+//                             <li>Easy & fast communication</li>
+//                         </ul>
+//                         <p className="text-gray-700 font-semibold">
+//                             Please send me a message before placing an order!
+//                         </p>
+//                     </div>
+//                 </div>
+//             </section>
+//         </div>
+//     );
+// }
+
+
+
+
+
+
 import NotFound from '@/components/NotFound';
 import Spinner from '@/components/Spinner';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function ProductDetails() {
     const router = useRouter();
     const { id } = router.query;
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedPackage, setSelectedPackage] = useState('Basic');
 
+    const demoPrice = 400;
+
+    const demoImages = [
+        { url: '/products/product3.jpg' },
+        { url: '/products/product5.jpg' },
+        { url: '/products/product3.jpg' },
+        { url: '/products/product4.jpg' },
+        { url: '/products/product5.jpg' }
+    ]
     useEffect(() => {
         if (id) {
             fetch(`/api/backed/products/${id}`)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.success) {
-                        setProduct(data.product);
+                        setProduct({ ...data.product, images: demoImages });
                     } else {
                         console.log(data.message);
                         setProduct(null);
@@ -37,75 +201,144 @@ export default function ProductDetails() {
     }
 
     if (!product) {
-        return <NotFound />
+        return <NotFound />;
+    }
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />
+    };
+
+    function SampleNextArrow(props) {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{ ...style, display: "block", background: "gray" }}
+                onClick={onClick}
+            />
+        );
+    }
+
+    function SamplePrevArrow(props) {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{ ...style, display: "block", background: "gray" }}
+                onClick={onClick}
+            />
+        );
     }
 
     return (
         <div className="min-h-screen">
             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
-            <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
-                <h1 className="text-3xl font-semibold">Market Your Business Here</h1>
-                <ul>
-                    <li className="hover:text-green-500"><Link href={'/'}>Home</Link> </li>
-                </ul>
-            </div>
-                <div className="flex flex-wrap items-center mx-auto max-w-7xl">
-                    <div className="w-full lg:max-w-lg lg:w-1/2 rounded-xl">
+                <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
+                    <h1 className="text-3xl font-semibold">{product.name}</h1>
+                    <ul>
+                        <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+                    </ul>
+                </div>
+
+                <div className="container mx-auto p-4">
+                    <div className="flex items-center mb-4">
                         <div>
-                            <div className="relative w-full max-w-lg">
-                                <div className="absolute top-0 rounded-full bg-violet-300 -left-4 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-                                <div className="absolute rounded-full bg-fuchsia-300 -bottom-24 right-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-                                <div className="relative">
-                                    <Image
-                                        src={'/bgp.jpg'}
-                                        alt="hero"
-                                        className="object-cover object-center mx-auto rounded-lg shadow-2xl"
-                                        width={400}
-                                        height={400}
-                                    />
-                                </div>
+                            <h2 className="font-semibold">{product.name}</h2>
+                            <div className="flex items-center">
+                                <span className="text-yellow-400">★★★★★</span>
+                                <span className="ml-1 text-gray-600">(5.0)</span>
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col items-start mt-12 mb-16 text-left lg:flex-grow lg:w-1/2 lg:pl-6 xl:pl-24 md:mb-0 xl:mt-0">
-                        <span className="mb-8 text-xs font-bold tracking-widest text-blue-600 uppercase">Your tagline</span>
-                        <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-600 md:text-7xl lg:text-5xl">{product.name}</h1>
-                        <p className="mb-8 text-base leading-relaxed text-left text-gray-500">{product.description}</p>
-                        <div className="mt-0 lg:mt-6 max-w-7xl sm:flex">
-                            <div className="mt-3 rounded-lg sm:mt-0">
-                                <button className="items-center block px-10 py-4 text-base font-medium text-center text-white transition duration-500 ease-in-out transform bg-blue-600 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Buy Now</button>
-                            </div>
-                            <div className="mt-3 rounded-lg sm:mt-0 sm:ml-3">
-                                <button className="items-center block px-10 py-3.5 text-base font-medium text-center text-blue-600 transition duration-500 ease-in-out transform border-2 border-white shadow-md rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">See features</button>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <Slider {...settings}>
+                                {product.images.map((image, index) => (
+                                    <div className="border rounded-lg" key={index}>
+                                        <Image src={image.url} width={500} height={500} alt={product.name} className="w-full rounded-lg mb-4" />
+                                    </div>
+                                ))}
+                            </Slider>
+                            <div className="grid grid-cols-5 gap-2 mt-10 ">
+                                {product.images.map((image, index) => (
+                                    <Image key={index} src={image.url} width={100} height={100} alt={`Thumbnail ${index + 1}`} className="w-full rounded" />
+                                ))}
                             </div>
                         </div>
+
+                        <div>
+                            <div className="bg-white rounded-lg shadow p-6">
+                                <div className="flex justify-between mb-4">
+                                    <button
+                                        className={`px-4 py-2 rounded ${selectedPackage === 'Basic' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+                                        onClick={() => setSelectedPackage('Basic')}
+                                    >
+                                        Basic
+                                    </button>
+                                    <button
+                                        className={`px-4 py-2 rounded ${selectedPackage === 'Standard' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+                                        onClick={() => setSelectedPackage('Standard')}
+                                    >
+                                        Standard
+                                    </button>
+                                    <button
+                                        className={`px-4 py-2 rounded ${selectedPackage === 'Premium' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+                                        onClick={() => setSelectedPackage('Premium')}
+                                    >
+                                        Premium
+                                    </button>
+                                </div>
+
+                                <h3 className="text-2xl font-bold mb-2">${demoPrice}</h3>
+                                <p className="text-sm text-gray-600 mb-4">Save up to 10% with Subscribe to Save</p>
+
+                                <h4 className="font-semibold mb-2">{selectedPackage}: Simple Illustration/Portrait</h4>
+                                <ul className="space-y-2 mb-4">
+                                    <li className="flex items-center">
+                                        <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                        7-day delivery
+                                    </li>
+                                    <li className="flex items-center">
+                                        <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                        1 concept
+                                    </li>
+                                </ul>
+
+                                <button className="w-full bg-black text-white py-3 rounded-lg font-semibold mb-4">
+                                    BUY NOW
+                                </button>
+
+                                <button className="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold">
+                                    Contact me
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-8">
+                        <h2 className="text-2xl font-bold mb-4">About this product</h2>
+                        <p className="text-gray-700 mb-4">{product.description}</p>
+                        <ul className="list-disc pl-5 text-gray-700 mb-4">
+                            <li>You are free to choose the colors, background, and posture of the character(s)</li>
+                            <li>JPEG + PNG files (+background)</li>
+                            <li>Source file (Premium package)</li>
+                            <li>100% Hand drawn digital illustration</li>
+                            <li>High quality image 3000 x 4000 pixels 300 dpi</li>
+                            <li>Easy & fast communication</li>
+                        </ul>
+                        <p className="text-gray-700 font-semibold">
+                            Please send me a message before placing an order!
+                        </p>
                     </div>
                 </div>
             </section>
-
-            <div className="w-full p-4 flex flex-col items-center lg:px-20">
-                <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
-                    <Image
-                        // src={product.imageUrl}
-                        src={'/bgp.jpg'}
-                        width={400}
-                        height={400}
-                        alt={product.name}
-                        className="object-contain mb-4 mx-auto rounded-lg shadow-2xl"
-                    />
-                    <h1 className="text-2xl font-bold text-gray-800 mb-2">{product.name}</h1>
-                    <p className="text-gray-600 mb-4">${product.price}</p>
-                    <p className="text-gray-600 mb-4">{product.description}</p>
-                    <a
-                        href={product.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600"
-                    >
-                        Buy Now
-                    </a>
-                </div>
-            </div>
         </div>
     );
 }

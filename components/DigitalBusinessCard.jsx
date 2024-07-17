@@ -165,16 +165,16 @@ END:VCARD`;
 
     return (
         <div className="min-h-screen w-full p-4 flex flex-col items-center lg:px-20">
-            <div className="w-1/2 flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
+
+            <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
+            <div className="w-full flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
                 <h1 className="text-3xl font-semibold">Hi there!, I&apos;m <span className="text-green-500">{card.first_name}</span></h1>
                 <ul>
                     <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
                 </ul>
             </div>
-
-            <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
                 <div className="mb-6">
-                    <div className="relative w-full h-64 mb-4 mx-auto">
+                    <div className="relative w-full h-40 rounded-lg bg-white shadow-sm mb-4 mx-auto">
                         {card.logo ? (
                             <Image
                                 src={`data:image/jpeg;base64,${card.logo}`}

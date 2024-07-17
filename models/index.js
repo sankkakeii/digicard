@@ -6,7 +6,7 @@ const sequelize = new Sequelize({
     storage: path.join(process.cwd(), 'database.sqlite'),
 });
 
-// Define models        
+// Define models
 const User = sequelize.define('User', {
     username: {
         type: DataTypes.STRING,
