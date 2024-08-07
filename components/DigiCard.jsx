@@ -96,15 +96,15 @@ export default function DigiCard({ currentUser, csrfToken }) {
 
                     <section>
                         <div className="flex flex-wrap justify-around">
-                            <div className="flex-1 max-w-xs bg-gray-100 p-6 m-2 rounded-lg shadow">
+                            <div className="flex-1 max-w-xs bg-gray-100/50 p-6 m-2 rounded-lg shadow">
                                 <h4 className="text-xl font-semibold text-blue-600 mb-4">Unlock Osun&apos;s Potential</h4>
                                 <p>Embark on your digital entrepreneurship journey with our carefully curated selection of customizable templates. Designed specifically to empower the creative minds of Osun State, our platform aims to fuel your success and drive economic prosperity throughout our thriving community.</p>
                             </div>
-                            <div className="flex-1 max-w-xs bg-gray-100 p-6 m-2 rounded-lg shadow">
+                            <div className="flex-1 max-w-xs bg-gray-100/50 p-6 m-2 rounded-lg shadow">
                                 <h4 className="text-xl font-semibold text-blue-600 mb-4">Interactive Elements</h4>
                                 <p>Add clickable links, contact buttons, and social media profiles to engage your audience. Create a dynamic digital presence that represents your brand and facilitates meaningful connections.</p>
                             </div>
-                            <div className="flex-1 max-w-xs bg-gray-100 p-6 m-2 rounded-lg shadow">
+                            <div className="flex-1 max-w-xs bg-gray-100/50 p-6 m-2 rounded-lg shadow">
                                 <h4 className="text-xl font-semibold text-blue-600 mb-4">Easy Sharing</h4>
                                 <p>Share your digital card via QR code, email, or direct link with just a few clicks. Expand your reach and make networking effortless in today&apos;s fast-paced digital landscape.</p>
                             </div>

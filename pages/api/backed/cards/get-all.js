@@ -1,11 +1,16 @@
-import { BusinessCard, Product } from '@/models';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 const handler = async (req, res) => {
     if (req.method === 'GET') {
         try {
-            const businessCards = await BusinessCard.findAll({
-                include: [Product],
-            });
+            const { data: businessCards, error } = await supabase
+                .from('business_cards')
+                .select(`*, products(*)`);
+
+            if (error) throw error;
 
             if (businessCards.length > 0) {
                 res.status(200).json({ success: true, businessCards });

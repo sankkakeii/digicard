@@ -23,6 +23,7 @@ export default function CardPage() {
             console.log(data.message);
             setCard(null);
           } else {
+            console.log(data)
             setCard(data);
           }
         })

@@ -122,14 +122,159 @@ export default function CreateCard({ csrfToken }) {
         }));
     }, [formState]);
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const formData = {
+    //         ...formState,
+    //         csrf_token: csrfToken,
+    //         social_media: JSON.stringify(formState.socialMedia),
+    //     };
+
+    //     try {
+    //         const response = await fetch('/api/backed/create-card', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(formData),
+    //         });
+
+    //         const data = await response.json();
+
+    //         if (data.success) {
+    //             const nameSlug = `${formState.firstName}-${formState.lastName}`.toLowerCase().replace(/\s+/g, '-');
+    //             setCardId(nameSlug);
+
+    //             // Send product information
+    //             for (const product of formState.products) {
+    //                 await fetch('/api/backed/create-product', {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                     },
+    //                     body: JSON.stringify({
+    //                         ...product,
+    //                         businessCardId: data.card_id, // Use the card ID returned from the card creation response
+    //                     }),
+    //                 });
+    //             }
+
+    //             setModalMessage({
+    //                 title: 'Success',
+    //                 message: `Your Digital Business Card URL: ${window.location.origin}/cards/${nameSlug}`,
+    //                 type: 'success',
+    //             });
+    //             setModalVisible(true);
+    //         } else {
+    //             setModalMessage({
+    //                 title: 'Error',
+    //                 message: data.message,
+    //                 type: 'error',
+    //             });
+    //             setModalVisible(true);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         setModalMessage({
+    //             title: 'Error',
+    //             message: 'An error occurred. Please try again.',
+    //             type: 'error',
+    //         });
+    //         setModalVisible(true);
+    //     }
+    // };
+
+
+
+
+
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const formData = {
+    //         ...formState,
+    //         csrf_token: csrfToken,
+    //         social_media: JSON.stringify(formState.socialMedia),
+    //     };
+    
+    //     try {
+    //         const response = await fetch('/api/backed/create-card', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(formData),
+    //         });
+    
+    //         const responseText = await response.text(); // Get response as text to log it
+    //         console.log('Response text:', responseText); // Log response text to debug
+    
+    //         // Try parsing the response as JSON
+    //         const data = JSON.parse(responseText);
+    
+    //         if (data.success) {
+    //             const nameSlug = `${formState.firstName}-${formState.lastName}`.toLowerCase().replace(/\s+/g, '-');
+    //             setCardId(nameSlug);
+    
+    //             // Send product information
+    //             for (const product of formState.products) {
+    //                 await fetch('/api/backed/create-product', {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Content-Type': 'application/json',
+    //                     },
+    //                     body: JSON.stringify({
+    //                         ...product,
+    //                         businessCardId: data.card_id, // Use the card ID returned from the card creation response
+    //                     }),
+    //                 });
+    //             }
+    
+    //             setModalMessage({
+    //                 title: 'Success',
+    //                 message: `Your Digital Business Card URL: ${window.location.origin}/cards/${nameSlug}`,
+    //                 type: 'success',
+    //             });
+    //             setModalVisible(true);
+    //         } else {
+    //             setModalMessage({
+    //                 title: 'Error',
+    //                 message: data.message,
+    //                 type: 'error',
+    //             });
+    //             setModalVisible(true);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         setModalMessage({
+    //             title: 'Error',
+    //             message: 'An error occurred. Please try again.',
+    //             type: 'error',
+    //         });
+    //         setModalVisible(true);
+    //     }
+    // };
+
+
+
+
+
+
+
+
+
+
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = {
             ...formState,
             csrf_token: csrfToken,
             social_media: JSON.stringify(formState.socialMedia),
+            products_services: JSON.stringify(formState.productsServices),
         };
-
+    
         try {
             const response = await fetch('/api/backed/create-card', {
                 method: 'POST',
@@ -138,13 +283,17 @@ export default function CreateCard({ csrfToken }) {
                 },
                 body: JSON.stringify(formData),
             });
-
-            const data = await response.json();
-
+    
+            const responseText = await response.text(); // Get response as text to log it
+            console.log('Response text:', responseText); // Log response text to debug
+    
+            // Try parsing the response as JSON
+            const data = JSON.parse(responseText);
+    
             if (data.success) {
                 const nameSlug = `${formState.firstName}-${formState.lastName}`.toLowerCase().replace(/\s+/g, '-');
                 setCardId(nameSlug);
-
+    
                 // Send product information
                 for (const product of formState.products) {
                     await fetch('/api/backed/create-product', {
@@ -158,7 +307,7 @@ export default function CreateCard({ csrfToken }) {
                         }),
                     });
                 }
-
+    
                 setModalMessage({
                     title: 'Success',
                     message: `Your Digital Business Card URL: ${window.location.origin}/cards/${nameSlug}`,
@@ -183,6 +332,8 @@ export default function CreateCard({ csrfToken }) {
             setModalVisible(true);
         }
     };
+    
+    
 
     const handleCopyLink = () => {
         const link = `${window.location.origin}/cards/${cardId}`;

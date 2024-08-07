@@ -80,30 +80,34 @@ END:VCARD`;
                     <div className="mb-6">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-2">Products & Services</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {card.Products.map((product) => (
-                                <div key={product.id} className="border rounded-lg bg-white shadow-md">
-                                    <Image
-                                        src={`/bgp.jpg`}
-                                        width={300}
-                                        height={300}
-                                        alt="Product Image"
-                                        className="object-cover object-center w-full mb-4 rounded-lg"
-                                    />
-                                    <div className="p-4">
-                                        <div className="inline-flex justify-between w-full">
-                                            <h1 className="mb-2 text-xl font-semibold leading-none tracking-tighter text-neutral-600">{product.name}</h1>
-                                            <span>${product.price}</span>
+                            {card.products && card.products.length > 0 ? (
+                                card.products.map((product) => (
+                                    <div key={product.id} className="border rounded-lg bg-white shadow-md">
+                                        <Image
+                                            src={`/bgp.jpg`}
+                                            width={300}
+                                            height={300}
+                                            alt="Product Image"
+                                            className="object-cover object-center w-full mb-4 rounded-lg"
+                                        />
+                                        <div className="p-4">
+                                            <div className="inline-flex justify-between w-full">
+                                                <h1 className="mb-2 text-xl font-semibold leading-none tracking-tighter text-neutral-600">{product.name}</h1>
+                                                <span>${product.price}</span>
+                                            </div>
+                                            <p className="mx-auto text-base font-medium leading-relaxed text-gray-500">{product.description}</p>
+                                            <a
+                                                onClick={() => router.push(`/products/${product.id}`)}
+                                                className="text-blue-600 cursor-pointer mt-2 block"
+                                            >
+                                                Learn More
+                                            </a>
                                         </div>
-                                        <p className="mx-auto text-base font-medium leading-relaxed text-gray-500">{product.description}</p>
-                                        <a
-                                            onClick={() => router.push(`/products/${product.id}`)}
-                                            className="text-blue-600 cursor-pointer mt-2 block"
-                                        >
-                                            Learn More
-                                        </a>
                                     </div>
-                                </div>
-                            ))}
+                                ))
+                            ) : (
+                                <p>No products available.</p>
+                            )}
                         </div>
                     </div>
                 );
@@ -167,12 +171,12 @@ END:VCARD`;
         <div className="min-h-screen w-full p-4 flex flex-col items-center lg:px-20">
 
             <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
-            <div className="w-full flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
-                <h1 className="text-3xl font-semibold">Hi there!, I&apos;m <span className="text-green-500">{card.first_name}</span></h1>
-                <ul>
-                    <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
-                </ul>
-            </div>
+                <div className="w-full flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
+                    <h1 className="text-3xl font-semibold">Hi there!, I&apos;m <span className="text-green-500">{card.first_name}</span></h1>
+                    <ul>
+                        <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+                    </ul>
+                </div>
                 <div className="mb-6">
                     <div className="relative w-full h-40 rounded-lg bg-white shadow-sm mb-4 mx-auto">
                         {card.logo ? (

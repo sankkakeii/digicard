@@ -1,10 +1,16 @@
-// pages/api/products/index.js
-import { Product } from '@/models';
+import { createClient } from '@supabase/supabase-js';
+
+// Initialize Supabase client
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 const handler = async (req, res) => {
     if (req.method === 'GET') {
         try {
-            const products = await Product.findAll();
+            const { data: products, error } = await supabase
+                .from('products')
+                .select('*');
+
+            if (error) throw error;
 
             if (products.length > 0) {
                 res.status(200).json({ success: true, products });
@@ -22,3 +28,4 @@ const handler = async (req, res) => {
 };
 
 export default handler;
+

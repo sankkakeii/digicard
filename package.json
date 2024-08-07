@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.45.1",
+    "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "cookie": "^0.6.0",
+    "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "next": "14.2.4",
     "next-connect": "^1.0.0",
@@ -22,7 +26,10 @@
     "sequelize": "^6.37.3",
     "slick-carousel": "^1.8.1",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "supabase": "^1.187.10",
+    "uuid": "^10.0.0",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "eslint": "^8",
