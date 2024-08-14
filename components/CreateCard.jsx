@@ -4,9 +4,12 @@ import QRCode from 'qrcode.react';
 import CustomModal from './CustomModal';
 import Link from 'next/link';
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import ProductCreationModal from './ProductCreationModal';
+import { Button } from '@headlessui/react';
 
 
 export default function CreateCard({ csrfToken }) {
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [formState, setFormState] = useState({
         firstName: '',
         lastName: '',
@@ -45,6 +48,12 @@ export default function CreateCard({ csrfToken }) {
         message: '',
         type: '',
     });
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        let user = JSON.parse(localStorage.getItem('osunUserData'));
+        setUserData(user);
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -52,6 +61,13 @@ export default function CreateCard({ csrfToken }) {
             ...prevState,
             [name]: value,
         }));
+    };
+
+    const handleOpenEscrow = () => {
+        // Simulate escrow account creation
+        setTimeout(() => {
+            setIsModalVisible(true);
+        }, 1000);
     };
 
     const handleFileChange = (e) => {
@@ -129,6 +145,7 @@ export default function CreateCard({ csrfToken }) {
             csrf_token: csrfToken,
             social_media: JSON.stringify(formState.socialMedia),
             products_services: JSON.stringify(formState.productsServices),
+            creator_id: userData.id,
         };
     
         try {
@@ -361,7 +378,7 @@ export default function CreateCard({ csrfToken }) {
                         </div>
                         {/* Products */}
                         <div className="space-y-4">
-                            <h2 className="text-2xl font-semibold text-gray-700">Products</h2>
+                            {/* <h2 className="text-2xl font-semibold text-gray-700">Products</h2>
                             <div className="space-y-4">
                                 {formState.products.map((entry, index) => (
                                     <div key={index} className="border p-4 rounded-lg bg-white shadow">
@@ -404,7 +421,7 @@ export default function CreateCard({ csrfToken }) {
                                 onClick={addProductEntry}
                             >
                                 Add Product
-                            </button>
+                            </button> */}
                         </div>
                         {/* Submit Button */}
                         <button
@@ -538,6 +555,7 @@ export default function CreateCard({ csrfToken }) {
                 type={modalMessage.type}
                 onClose={() => setModalVisible(false)}
             />
+            {/* <ProductCreationModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} /> */}
 
         </>
     );

@@ -1,11 +1,16 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FaFileDownload, FaShare, FaEnvelope, FaPhone, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
+import { Button } from './ui/button';
+import ProductCreationModal from './ProductCreationModal';
 
 export default function DigitalBusinessCard({ card }) {
     const [activeSection, setActiveSection] = useState('about');
+    const [userData, setUserData] = useState(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [products, setProducts] = useState([]);
     const router = useRouter();
 
     const downloadVCard = () => {
@@ -28,6 +33,19 @@ END:VCARD`;
         document.body.removeChild(link);
     };
 
+
+    const handleProductsUpdate = (updatedProducts) => {
+        setProducts(updatedProducts);
+    };
+
+    const openModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setIsModalVisible(false);
+    };
+
     const shareCard = () => {
         if (navigator.share) {
             navigator
@@ -43,6 +61,11 @@ END:VCARD`;
             prompt('Copy this link to share the card:', window.location.href);
         }
     };
+
+    useEffect(() => {
+        let user = JSON.parse(localStorage.getItem('osunUserData'));
+        setUserData(user);
+    }, []);
 
     const renderSectionContent = () => {
         switch (activeSection) {
@@ -78,13 +101,24 @@ END:VCARD`;
             case 'products':
                 return (
                     <div className="mb-6">
-                        <h2 className="text-2xl font-semibold text-gray-800 mb-2">Products & Services</h2>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-2">Products & Services</h2>
+                            {userData && card.creator_id === userData.id && (
+                                <Button
+                                    variant="default"
+                                    className="mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
+                                    onClick={openModal}
+                                >
+                                    Add Product
+                                </Button>
+                            )}
+                        </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {card.products && card.products.length > 0 ? (
                                 card.products.map((product) => (
                                     <div key={product.id} className="border rounded-lg bg-white shadow-md">
                                         <Image
-                                            src={`/bgp.jpg`}
+                                            src={`/bgp.jpg`} // Replace with your actual image source
                                             width={300}
                                             height={300}
                                             alt="Product Image"
@@ -111,6 +145,8 @@ END:VCARD`;
                         </div>
                     </div>
                 );
+
+
 
             case 'contact':
                 return (
@@ -254,6 +290,13 @@ END:VCARD`;
                     {renderSectionContent()}
                 </div>
             </div>
+
+            <ProductCreationModal
+                visible={isModalVisible}
+                onClose={closeModal}
+                onProductsUpdate={handleProductsUpdate}
+                card={card}
+            />
         </div>
     );
 }

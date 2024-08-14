@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import CustomModal from './CustomModal';
 
@@ -10,6 +10,7 @@ export default function DigiCard({ currentUser, csrfToken }) {
     const [modalTitle, setModalTitle] = useState('');
     const [modalMessage, setModalMessage] = useState('');
     const [modalType, setModalType] = useState('success');
+    const [userData, setUserData] = useState(null);
 
     const toggleTheme = () => {
         setTheme(prevTheme => {
@@ -18,6 +19,10 @@ export default function DigiCard({ currentUser, csrfToken }) {
             return 'light-mode';
         });
     };
+
+    useEffect(() => {
+        localStorage.setItem('osunUserData', JSON.stringify(userData));
+    }, [userData]);
 
     const showAuthPopup = (loginMode) => {
         setIsLoginMode(loginMode);
@@ -48,12 +53,13 @@ export default function DigiCard({ currentUser, csrfToken }) {
                 }),
             });
             const data = await response.json();
+            setUserData(data.data);
             setModalTitle(data.success ? 'Success' : 'Error');
             setModalMessage(data.message);
             setModalType(data.success ? 'success' : 'error');
             setModalVisible(true);
             if (data.success && isLoginMode) {
-                window.location.href = '/create-card'; // Redirect to create card page after successful login
+                window.location.href = '/profile/profile'; // Redirect to profile page after successful login
             } else {
                 setIsLoginMode(true);
             }

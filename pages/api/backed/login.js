@@ -21,12 +21,14 @@ export default async function handler(req, res) {
                 return res.status(401).json({ success: false, message: 'Invalid username or password' })
             }
 
+            console.log(user)
+
             const passwordMatch = await bcrypt.compare(password, user.password)
 
             if (passwordMatch) {
                 const token = jwt.sign({ id: user.id, username: user.username }, process.env.NEXT_JWT_SECRET, { expiresIn: '1h' })
                 res.setHeader('Set-Cookie', serialize('token', token, { path: '/', httpOnly: true }))
-                res.status(200).json({ success: true, message: 'Login successful' })
+                res.status(200).json({ success: true, message: 'Login successful', data: user })
             } else {
                 res.status(401).json({ success: false, message: 'Invalid username or password' })
             }

@@ -23,6 +23,7 @@ const apiRoute = async (req, res) => {
             .insert([
                 {
                     id,
+                    creator_id: data.creator_id,
                     first_name: data.firstName,
                     last_name: data.lastName,
                     job_title: data.jobTitle,
