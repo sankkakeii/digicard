@@ -127,7 +127,7 @@ END:VCARD`;
                                         <div className="p-4">
                                             <div className="inline-flex justify-between w-full">
                                                 <h1 className="mb-2 text-xl font-semibold leading-none tracking-tighter text-neutral-600">{product.name}</h1>
-                                                <span>₦ {product.price || '10,000'}</span>
+                                                <span>₦ {product.price || '400'}</span>
                                             </div>
                                             <p className="mx-auto text-base font-medium leading-relaxed text-gray-500">{product.description}</p>
                                             <a
