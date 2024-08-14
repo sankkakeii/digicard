@@ -125,7 +125,7 @@ export default function DigiCard({ currentUser, csrfToken }) {
                 {authPopupVisible && (
                     <>
                         <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={hideAuthPopup}></div>
-                        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white w-1/4 p-8 rounded-lg shadow-lg z-50">
+                        <div className="fixed w-1/2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg z-50">
                             <h2 className="text-xl font-semibold mb-4">{isLoginMode ? 'Login' : 'Register'}</h2>
                             <form onSubmit={handleSubmit}>
                                 <input type="hidden" name="csrf_token" value={csrfToken} />
@@ -139,23 +139,28 @@ export default function DigiCard({ currentUser, csrfToken }) {
                                 </div>
                                 {!isLoginMode && (
                                     <>
-                                        <div className="mb-4">
-                                            <label htmlFor="firstname" className="block text-sm font-medium mb-1">FirstName:</label>
-                                            <input type="text" id="firstname" name="firstname" required className="w-full px-3 py-2 border rounded" />
+                                        <div className="flex w-full items-center gap-5">
+                                            <div className="mb-4 w-full">
+                                                <label htmlFor="firstname" className="block text-sm font-medium mb-1">FirstName:</label>
+                                                <input type="text" id="firstname" name="firstname" required className="w-full px-3 py-2 border rounded" />
+                                            </div>
+
+                                            <div className="mb-4 w-full">
+                                                <label htmlFor="lastname" className="block text-sm font-medium mb-1">LastName:</label>
+                                                <input type="lastname" id="lastname" name="lastname" required className="w-full px-3 py-2 border rounded" />
+                                            </div>
+                                        </div>
+                                        <div className="flex w-full items-center gap-5">
+                                            <div className="mb-4 w-full">
+                                                <label htmlFor="email" className="block text-sm font-medium mb-1">Email:</label>
+                                                <input type="email" id="email" name="email" required className="w-full px-3 py-2 border rounded" />
+                                            </div>
+                                            <div className="mb-4 w-full">
+                                                <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone Number:</label>
+                                                <input type="tel" id="phone" name="phone" required className="w-full px-3 py-2 border rounded" />
+                                            </div>
                                         </div>
 
-                                        <div className="mb-4">
-                                            <label htmlFor="lastname" className="block text-sm font-medium mb-1">LastName:</label>
-                                            <input type="lastname" id="lastname" name="lastname" required className="w-full px-3 py-2 border rounded" />
-                                        </div>
-                                        <div className="mb-4">
-                                            <label htmlFor="email" className="block text-sm font-medium mb-1">Email:</label>
-                                            <input type="email" id="email" name="email" required className="w-full px-3 py-2 border rounded" />
-                                        </div>
-                                        <div className="mb-4">
-                                            <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone Number:</label>
-                                            <input type="tel" id="phone" name="phone" required className="w-full px-3 py-2 border rounded" />
-                                        </div>
                                         <div className="mb-4">
                                             <label htmlFor="address" className="block text-sm font-medium mb-1">Address:</label>
                                             <input type="text" id="address" name="address" required className="w-full px-3 py-2 border rounded" />
