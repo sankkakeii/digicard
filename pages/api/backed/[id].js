@@ -15,6 +15,7 @@ const apiRoute = async (req, res) => {
             .single(); // Assuming card_url is unique
 
         if (error) {
+        console.log('MINOT', error);
             console.error('Error fetching card data:', error);
             return res.status(500).json({ message: 'Internal server error' });
         }
@@ -25,6 +26,7 @@ const apiRoute = async (req, res) => {
 
         res.status(200).json(businessCard);
     } catch (error) {
+    console.log('MAJOT', error);
         console.error('Error fetching card data:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
