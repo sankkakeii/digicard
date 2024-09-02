@@ -67,8 +67,9 @@ END:VCARD`;
         if (!user) {
             // set user data to null
             setUserData(null);
+        } else {
+            setUserData(JSON.parse(user));
         }
-        setUserData(JSON.parse(user));
     }, []);
 
     const renderSectionContent = () => {
