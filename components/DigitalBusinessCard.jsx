@@ -64,6 +64,10 @@ END:VCARD`;
 
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem('osunUserData'));
+        if (!user) {
+            // set user data to null if it doesn't exist
+            user = null;
+        }
         setUserData(user);
     }, []);
 
