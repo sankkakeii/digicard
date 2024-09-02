@@ -12,13 +12,13 @@ export default function ProfilePage() {
     const router = useRouter();
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('osunUserData'));
+        const user = localStorage.getItem('osunUserData');
         if (!user) {
             // set user data to null
             setUserData(null);
             return;
         }
-        setUserData(user);
+        setUserData(JSON.parse(user));
 
         if (user && user.id) {
             fetchCards(user.id);
