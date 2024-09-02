@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 const ProductCreationModal = ({ visible, onClose, onProductsUpdate, card }) => {
     const [productName, setProductName] = useState('');

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Inter } from "next/font/google";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';

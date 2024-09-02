@@ -1,6 +1,6 @@
 import NotFound from '@/components/NotFound';
 import Spinner from '@/components/Spinner';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';

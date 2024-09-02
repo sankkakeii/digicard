@@ -9,7 +9,7 @@ export default function Navbar({ currentUser, showAuthPopup }) {
     return (
         <header className="bg-gray-100 rounded-lg relative inline-flex w-full text-blue-500 z-50">
             <div
-                class="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200">
+                className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200">
             </div>
             <div className="container mx-auto justify-between items-center py-4 px-4 group relative inline-flex text-base rounded-xl bg-gray-100 font-semiboldtransition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-400/30">
                 <h1 className="text-2xl font-bold">Digital Osun Hub</h1>

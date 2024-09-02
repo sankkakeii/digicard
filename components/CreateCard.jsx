@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import QRCode from 'qrcode.react';
 import CustomModal from './CustomModal';
 import Link from 'next/link';
