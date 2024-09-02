@@ -422,7 +422,7 @@ export default function CreateCard({ csrfToken }) {
                                 Add Product
                             </button> */}
 
-                            {userData && (
+                            {/* {userData && (
                                 <Button
                                     variant="default"
                                     className="mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
@@ -430,7 +430,7 @@ export default function CreateCard({ csrfToken }) {
                                 >
                                     Add Product
                                 </Button>
-                            )}
+                            )} */}
                         </div>
                         {/* Submit Button */}
                         <button
