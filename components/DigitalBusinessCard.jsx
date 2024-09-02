@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { FaFileDownload, FaShare, FaEnvelope, FaPhone, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
 import { Button } from './ui/button';
-import ProductCreationModal from './ProductCreationModal';
+import ProductCreationModal from './ProductCreationModal2';
 
 export default function DigitalBusinessCard({ card }) {
     const [activeSection, setActiveSection] = useState('about');

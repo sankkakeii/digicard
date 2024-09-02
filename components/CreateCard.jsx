@@ -4,7 +4,7 @@ import QRCode from 'qrcode.react';
 import CustomModal from './CustomModal';
 import Link from 'next/link';
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
-import ProductCreationModal from './ProductCreationModal';
+import ProductCreationModal from './ProductCreationModal2';
 import { Button } from '@headlessui/react';
 
 
@@ -55,19 +55,25 @@ export default function CreateCard({ csrfToken }) {
         setUserData(user);
     }, []);
 
+
+    const handleProductsUpdate = (updatedProducts) => {
+        setProducts(updatedProducts);
+    };
+
+    const openModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setIsModalVisible(false);
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormState((prevState) => ({
             ...prevState,
             [name]: value,
         }));
-    };
-
-    const handleOpenEscrow = () => {
-        // Simulate escrow account creation
-        setTimeout(() => {
-            setIsModalVisible(true);
-        }, 1000);
     };
 
     const handleFileChange = (e) => {
@@ -205,8 +211,6 @@ export default function CreateCard({ csrfToken }) {
             setModalVisible(true);
         }
     };
-    
-    
 
     const handleCopyLink = () => {
         const link = `${window.location.origin}/cards/${cardId}`;
@@ -223,11 +227,6 @@ export default function CreateCard({ csrfToken }) {
     return (
         <>
             <div className="relative container mx-auto p-5 flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
-                <div className=" -z-30 absolute top-0 rounded-full bg-violet-300 right-12 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-                <div className=" -z-30 absolute rounded-full bg-fuchsia-300 -bottom-24 left-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
-
-                <div className=" -z-30 absolute top-80 rounded-full bg-yellow-300 -right-24 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-                <div className=" -z-30 absolute rounded-full bg-green-300 top-24 -left-20 w-72 h-72 mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
                 {/* Form Section */}
                 <div className="flex-1 lg:pr-5 mb-5 lg:mb-0  ">
                     <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
@@ -422,6 +421,16 @@ export default function CreateCard({ csrfToken }) {
                             >
                                 Add Product
                             </button> */}
+
+                            {userData && (
+                                <Button
+                                    variant="default"
+                                    className="mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
+                                    onClick={openModal}
+                                >
+                                    Add Product
+                                </Button>
+                            )}
                         </div>
                         {/* Submit Button */}
                         <button
@@ -555,7 +564,11 @@ export default function CreateCard({ csrfToken }) {
                 type={modalMessage.type}
                 onClose={() => setModalVisible(false)}
             />
-            {/* <ProductCreationModal visible={isModalVisible} onClose={() => setIsModalVisible(false)} /> */}
+            <ProductCreationModal
+                visible={isModalVisible}
+                onClose={closeModal}
+                onProductsUpdate={handleProductsUpdate}
+            />
 
         </>
     );
