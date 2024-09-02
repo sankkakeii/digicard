@@ -227,9 +227,24 @@ export default function DigiCard({ currentUser, csrfToken }) {
         });
     };
 
+    const demoData = {
+        id: 1,
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'HkU7t@example.com',
+        phone: '123-456-7890',
+        logo: 'logo.png',
+        profile_picture: 'profile.png',
+    }
+
     useEffect(() => {
-        localStorage.setItem('osunUserData', JSON.stringify(userData));
-    }, [userData]);
+        if(userData == null || userData == undefined && currentUser != null || currentUser != undefined){ 
+            localStorage.setItem('osunUserData', JSON.stringify(demoData));
+        } else {
+            localStorage.setItem('osunUserData', JSON.stringify(userData));
+        }
+
+    }, [userData, currentUser]);
 
     const showAuthPopup = (loginMode) => {
         setIsLoginMode(loginMode);

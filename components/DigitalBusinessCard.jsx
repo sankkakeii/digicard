@@ -63,13 +63,14 @@ END:VCARD`;
     };
 
     useEffect(() => {
-        let user = localStorage.getItem('osunUserData');
+        let user = JSON.parse(localStorage.getItem('osunUserData'));
         if (!user) {
             // set user data to null
             setUserData(null);
-        } else {
-            setUserData(JSON.parse(user));
+            localStorage.setItem('osunUserData', null);
+            return;
         }
+        setUserData(user);
     }, []);
 
     const renderSectionContent = () => {

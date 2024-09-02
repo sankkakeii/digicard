@@ -17,13 +17,13 @@ export default function ProfilePage() {
             // set user data to null
             setUserData(null);
             return;
-        } else {
-            setUserData(JSON.parse(user));
-        }
-        // setUserData(JSON.parse(user));
+        } 
 
-        if (user && user.id) {
-            fetchCards(user.id);
+        const parsedUser = JSON.parse(user); // Parse the user string to JSON
+        setUserData(parsedUser); // Set parsed user data
+
+        if (parsedUser && parsedUser.id) {
+            fetchCards(parsedUser.id); // Use parsedUser.id instead of user.id
         }
     }, []);
 
