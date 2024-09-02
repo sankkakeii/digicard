@@ -71,9 +71,26 @@ export default function CardPage() {
   const [card, setCard] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const demoData = {
+    id: 1,
+    first_name: 'John',
+    last_name: 'Doe',
+    email: 'HkU7t@example.com',
+    phone: '123-456-7890',
+    logo: 'logo.png',
+    profile_picture: 'profile.png',
+}
+
+
   useEffect(() => {
     if (!id) return; // Wait for the 'id' to be defined
 
+    let user = JSON.parse(localStorage.getItem('osunUserData'));
+
+    if (!user || user === null || user === undefined) {
+      localStorage.setItem('osunUserData', JSON.stringify(demoData));
+
+    }
     setLoading(true); // Set loading to true when fetching data
     console.log('Router query:', router.query);
     console.log('Card ID:', id);
