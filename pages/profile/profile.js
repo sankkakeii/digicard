@@ -66,10 +66,16 @@ export default function ProfilePage() {
     };
 
     const handleAddCard = () => {
-        if (isSubscribed) {
+        // If user has no cards, allow adding one
+        if (cards.length === 0) {
             router.push('/create-card');
         } else {
-            setShowSubscriptionMessage(true);
+            // If user has cards, check subscription status
+            if (isSubscribed) {
+                router.push('/create-card');
+            } else {
+                setShowSubscriptionMessage(true);
+            }
         }
     };
     
