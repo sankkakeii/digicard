@@ -11,6 +11,8 @@ export default function ProfilePage() {
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [reference, setReference] = useState(null);
+    const [showSubscriptionMessage, setShowSubscriptionMessage] = useState(false);
+
 
     const router = useRouter();
 
@@ -30,8 +32,18 @@ export default function ProfilePage() {
         }
     }, []);
 
+    // set timer to reset subscription message after 5 seconds
     useEffect(() => {
-        if(reference){
+        if (showSubscriptionMessage) {
+            const timer = setTimeout(() => {
+                setShowSubscriptionMessage(false);
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [showSubscriptionMessage]);
+
+    useEffect(() => {
+        if (reference) {
             localStorage.setItem('reference', reference);
         }
     }, [reference]);
@@ -54,15 +66,19 @@ export default function ProfilePage() {
     };
 
     const handleAddCard = () => {
-        router.push('/create-card');
+        if (isSubscribed) {
+            router.push('/create-card');
+        } else {
+            setShowSubscriptionMessage(true);
+        }
     };
+    
 
     const handleSubscribe = async () => {
-        // create a unique reference id generator
         const reference = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
         setReference(reference);
-    
+
         try {
             console.log('Subscribing...');
             console.log(userData);
@@ -74,18 +90,17 @@ export default function ProfilePage() {
                 body: JSON.stringify({
                     customer_email: userData.email,
                     customer_phone: userData.phone,
-                    amount: 1500, // Set the amount for the subscription
-                    reference: reference, // Generate or retrieve a unique reference
-                    frequency: 'monthly', // or 'yearly'
+                    amount: 1500,
+                    reference: reference,
+                    frequency: 'monthly',
                 }),
             });
-    
+
             const result = await response.json();
-    
+
             if (result.success && result.data.transaction.authorization_url) {
                 console.log('Subscription successful:', result.data.transaction.authorization_url);
                 setSubscriptionData(result);
-                // Redirect to the authorization URL
                 router.push(result.data.transaction.authorization_url);
             } else {
                 console.error('Subscription failed:', result.message);
@@ -94,7 +109,6 @@ export default function ProfilePage() {
             console.error('Error during subscription:', error);
         }
     };
-    
 
     const renderSectionContent = () => {
         switch (activeSection) {
@@ -159,7 +173,7 @@ export default function ProfilePage() {
 
     return (
         <div className="min-h-screen w-full p-4 flex flex-col items-center lg:px-20">
-            <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
+            <div className="bg-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center justify-center mb-8 w-full max-w-4xl">
                 <div className="w-full flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
                     <h1 className="text-3xl font-semibold">Welcome, <span className="text-green-500">{userData?.firstname}</span>!</h1>
                     <ul>
@@ -189,6 +203,13 @@ export default function ProfilePage() {
                 >
                     {isSubscribed ? 'Subscribed' : 'Subscribe Now'}
                 </button>
+    
+                {/* Message if user is not subscribed */}
+                {!isSubscribed && showSubscriptionMessage && (
+                    <div className="text-center mt-4 bg-red-100 rounded-lg shadow-lg p-4 w-fit">
+                        <p className="text-lg text-red-600">Subscribe to get access to premium features.</p>
+                    </div>
+                )}
             </div>
             <div className="flex flex-col lg:flex-row w-full max-w-4xl">
                 <div className="w-full lg:w-1/4 bg-white rounded-xl shadow-lg p-6 mb-4 lg:mb-0">
@@ -213,4 +234,5 @@ export default function ProfilePage() {
             </div>
         </div>
     );
+    
 }
