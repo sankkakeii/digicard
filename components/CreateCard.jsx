@@ -153,7 +153,7 @@ export default function CreateCard({ csrfToken }) {
             products_services: JSON.stringify(formState.productsServices),
             creator_id: userData.id,
         };
-    
+
         try {
             const response = await fetch('/api/backed/create-card', {
                 method: 'POST',
@@ -162,17 +162,17 @@ export default function CreateCard({ csrfToken }) {
                 },
                 body: JSON.stringify(formData),
             });
-    
+
             const responseText = await response.text(); // Get response as text to log it
             console.log('Response text:', responseText); // Log response text to debug
-    
+
             // Try parsing the response as JSON
             const data = JSON.parse(responseText);
-    
+
             if (data.success) {
                 const nameSlug = `${formState.firstName}-${formState.lastName}`.toLowerCase().replace(/\s+/g, '-');
                 setCardId(nameSlug);
-    
+
                 // Send product information
                 for (const product of formState.products) {
                     await fetch('/api/backed/create-product', {
@@ -186,7 +186,7 @@ export default function CreateCard({ csrfToken }) {
                         }),
                     });
                 }
-    
+
                 setModalMessage({
                     title: 'Success',
                     message: `Your Digital Business Card URL: ${window.location.origin}/cards/${nameSlug}`,

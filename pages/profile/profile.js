@@ -8,24 +8,33 @@ export default function ProfilePage() {
     const [userData, setUserData] = useState(null);
     const [cards, setCards] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [subscriptionData, setSubscriptionData] = useState(null);
+    const [reference, setReference] = useState(null);
 
     const router = useRouter();
 
     useEffect(() => {
         const user = localStorage.getItem('osunUserData');
         if (!user) {
-            // set user data to null
             setUserData(null);
             return;
-        } 
+        }
 
-        const parsedUser = JSON.parse(user); // Parse the user string to JSON
-        setUserData(parsedUser); // Set parsed user data
+        const parsedUser = JSON.parse(user);
+        setUserData(parsedUser);
+        setIsSubscribed(parsedUser.is_subscribed);
 
         if (parsedUser && parsedUser.id) {
-            fetchCards(parsedUser.id); // Use parsedUser.id instead of user.id
+            fetchCards(parsedUser.id);
         }
     }, []);
+
+    useEffect(() => {
+        if(reference){
+            localStorage.setItem('reference', reference);
+        }
+    }, [reference]);
 
     const fetchCards = async (creatorId) => {
         try {
@@ -47,6 +56,45 @@ export default function ProfilePage() {
     const handleAddCard = () => {
         router.push('/create-card');
     };
+
+    const handleSubscribe = async () => {
+        // create a unique reference id generator
+        const reference = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+        setReference(reference);
+    
+        try {
+            console.log('Subscribing...');
+            console.log(userData);
+            const response = await fetch('/api/backed/subscription', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    customer_email: userData.email,
+                    customer_phone: userData.phone,
+                    amount: 1500, // Set the amount for the subscription
+                    reference: reference, // Generate or retrieve a unique reference
+                    frequency: 'monthly', // or 'yearly'
+                }),
+            });
+    
+            const result = await response.json();
+    
+            if (result.success && result.data.transaction.authorization_url) {
+                console.log('Subscription successful:', result.data.transaction.authorization_url);
+                setSubscriptionData(result);
+                // Redirect to the authorization URL
+                router.push(result.data.transaction.authorization_url);
+            } else {
+                console.error('Subscription failed:', result.message);
+            }
+        } catch (error) {
+            console.error('Error during subscription:', error);
+        }
+    };
+    
 
     const renderSectionContent = () => {
         switch (activeSection) {
@@ -100,7 +148,7 @@ export default function ProfilePage() {
                 return (
                     <div className="mb-6">
                         <h2 className="text-2xl font-semibold text-gray-800 mb-2">Other Information</h2>
-                        {/* Add other user-related information here */}
+                        <p className="text-gray-600">Subscription: {isSubscribed ? 'Active' : 'Inactive'}</p>
                     </div>
                 );
 
@@ -135,6 +183,12 @@ export default function ProfilePage() {
                 </div>
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">{userData?.firstname} {userData?.lastname}</h1>
                 <p className="text-lg text-gray-600 mb-4">{userData?.username}</p>
+                <button
+                    onClick={isSubscribed ? null : handleSubscribe}
+                    className={`px-4 py-2 rounded-md ${isSubscribed ? 'bg-green-600 cursor-default' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
+                >
+                    {isSubscribed ? 'Subscribed' : 'Subscribe Now'}
+                </button>
             </div>
             <div className="flex flex-col lg:flex-row w-full max-w-4xl">
                 <div className="w-full lg:w-1/4 bg-white rounded-xl shadow-lg p-6 mb-4 lg:mb-0">
