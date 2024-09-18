@@ -1,4 +1,4 @@
-import CreateCard from "@/components/CreateCard";
+import CreateCard from "@/components/CreateCardComponents/CreateCard";
 
 
 export default function Create() {
