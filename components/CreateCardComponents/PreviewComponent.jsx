@@ -2,6 +2,7 @@ import React from 'react'
 import QRCode from 'qrcode.react';
 import Image from 'next/image';
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import Link from 'next/link';
 
 export default function PreviewComponent({ previewData, cardId, handleCopyLink }) {
     return (
@@ -106,14 +107,15 @@ export default function PreviewComponent({ previewData, cardId, handleCopyLink }
                 </div>
                 <div className="flex justify-end">
                     {cardId && (
-                        <div className="flex gap-5 items-center">
+                        <div className="flex gap-5">
                             <QRCode value={`${window.location.origin}/cards/${cardId}`} />
                             <button
                                 onClick={handleCopyLink}
-                                className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
+                                className="py-2 px-4 h-fit bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
                             >
                                 Copy Link
                             </button>
+                            <Link href={`/cards/${cardId}`} className="underline text-blue-500 hover:text-blue-600" >Go to Card</Link>
                         </div>
                     )}
                 </div>

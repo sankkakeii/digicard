@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { FaFileDownload, FaShare, FaEnvelope, FaPhone, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
 import { Button } from './ui/button';
 import ProductCreationModal from './ProductCreationModal2';
+import QRCode from "qrcode.react";
 
 export default function DigitalBusinessCard({ card }) {
     const [activeSection, setActiveSection] = useState('about');
@@ -123,14 +124,6 @@ END:VCARD`;
                             {card.products && card.products.length > 0 ? (
                                 card.products.map((product) => (
                                     <div key={product.id} className="border rounded-lg bg-white shadow-md">
-                                        {/* <Image
-                                            src={`/bgp.jpg`} // Replace with your actual image source
-                                            width={300}
-                                            height={300}
-                                            alt="Product Image"
-                                            className="object-cover object-center w-full mb-4 rounded-lg"
-                                        /> */}
-
                                         {product.images.map((image, index) => (
                                             <div key={index} className="border rounded-lg">
                                                 <Image
@@ -225,8 +218,8 @@ END:VCARD`;
         <div className="min-h-screen w-full p-4 flex flex-col items-center lg:px-20">
 
             <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
-                <div className="w-full flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
-                    <h1 className="text-3xl font-semibold">Hi there!, I&apos;m <span className="text-green-500">{card.first_name}</span></h1>
+                <div className="w-full flex justify-between items-center mb-6 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg hover:shadow-xl text-white z-50 p-6">
+                    <h1 className="text-3xl font-semibold">Hi there!, I&apos;m <span className="text-green-400">{card.first_name}</span></h1>
                     <ul className="flex gap-2 items-center justify-center">
                         <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
                         <li className="hover:text-green-500"><Link href={'/profile/profile'}>Profile</Link></li>
@@ -263,6 +256,9 @@ END:VCARD`;
 
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">{card.first_name} {card.last_name}</h1>
                 <p className="text-lg text-gray-600 mb-4">{card.job_title}</p>
+                <div className="flex flex-col items-center justify-center">
+                    <QRCode value={window.location.href} size={128} /> {/* QR Code based on the URL */}
+                    </div>
                 <div className="mt-6 flex flex-col w-full items-center justify-center lg:flex-row gap-4">
                     <div className="flex flex-col items-center justify-center">
                         <button
