@@ -3,7 +3,8 @@ import CustomModal from '../CustomModal';
 import ProductCreationModal from '../ProductCreationModal2';
 import PreviewComponent from './PreviewComponent';
 import Form from './Form';
-
+import Spinner from '../Spinner'; // Assuming you have a Spinner component
+import imageCompression from 'browser-image-compression'; // Import image compression library
 
 export default function CreateCard({ csrfToken }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -31,7 +32,6 @@ export default function CreateCard({ csrfToken }) {
         products: [],
     });
 
-
     const [cardId, setCardId] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMessage, setModalMessage] = useState({
@@ -40,15 +40,15 @@ export default function CreateCard({ csrfToken }) {
         type: '',
     });
     const [userData, setUserData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false); // Loading state
 
     useEffect(() => {
-        let user = JSON.parse(localStorage.getItem('osunUserData'));
+        const user = JSON.parse(localStorage.getItem('osunUserData'));
         setUserData(user);
     }, []);
 
-
     const handleProductsUpdate = (updatedProducts) => {
-        setProducts(updatedProducts);
+        setFormState((prevState) => ({ ...prevState, products: updatedProducts }));
     };
 
     const openModal = () => {
@@ -67,16 +67,32 @@ export default function CreateCard({ csrfToken }) {
         }));
     };
 
-    const handleFileChange = (e) => {
+    const handleFileChange = async (e) => {
         const { name, files } = e.target;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setFormState((prevState) => ({
-                ...prevState,
-                [name]: reader.result.split(',')[1], // Get base64 string
-            }));
-        };
-        reader.readAsDataURL(files[0]);
+        if (files[0]) {
+            try {
+                const compressedFile = await imageCompression(files[0], {
+                    maxSizeMB: 1, // Set max size to 1MB
+                    useWebWorker: true,
+                });
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setFormState((prevState) => ({
+                        ...prevState,
+                        [name]: reader.result.split(',')[1], // Get base64 string
+                    }));
+                };
+                reader.readAsDataURL(compressedFile);
+            } catch (error) {
+                console.error('Image compression error:', error);
+                setModalMessage({
+                    title: 'Error',
+                    message: 'Image compression failed. Please try again.',
+                    type: 'error',
+                });
+                setModalVisible(true);
+            }
+        }
     };
 
     const addSocialMediaEntry = () => {
@@ -129,7 +145,6 @@ export default function CreateCard({ csrfToken }) {
         setPreviewData((prevData) => ({
             ...prevData,
             ...formState,
-            email: formState.email.replace('@', '@').replace('.', '.'),
             logo: formState.logo ? `data:image/jpeg;base64,${formState.logo}` : null,
             profilePicture: formState.profilePicture ? `data:image/jpeg;base64,${formState.profilePicture}` : null,
         }));
@@ -137,11 +152,12 @@ export default function CreateCard({ csrfToken }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true); // Start loading state
         const formData = {
             ...formState,
             csrf_token: csrfToken,
             social_media: JSON.stringify(formState.socialMedia),
-            products_services: JSON.stringify(formState.productsServices),
+            products_services: JSON.stringify(formState.products),
             creator_id: userData.id,
         };
 
@@ -154,52 +170,70 @@ export default function CreateCard({ csrfToken }) {
                 body: JSON.stringify(formData),
             });
 
-            const responseText = await response.text(); // Get response as text to log it
-            console.log('Response text:', responseText); // Log response text to debug
+            const responseText = await response.text();
+            console.log('Response text:', responseText);
 
-            // Try parsing the response as JSON
-            const data = JSON.parse(responseText);
+            if (response.ok) {
+                const data = JSON.parse(responseText);
 
-            if (data.success) {
-                const nameSlug = `${formState.firstName}-${formState.lastName}`.toLowerCase().replace(/\s+/g, '-');
-                setCardId(nameSlug);
+                if (data.success) {
+                    const nameSlug = `${formState.firstName}-${formState.lastName}`.toLowerCase().replace(/\s+/g, '-');
+                    setCardId(nameSlug);
 
-                // Send product information
-                for (const product of formState.products) {
-                    await fetch('/api/backed/create-product', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            ...product,
-                            businessCardId: data.card_id, // Use the card ID returned from the card creation response
-                        }),
+                    for (const product of formState.products) {
+                        await fetch('/api/backed/create-product', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                ...product,
+                                businessCardId: data.card_id,
+                            }),
+                        });
+                    }
+
+                    setModalMessage({
+                        title: 'Success',
+                        message: `Your Digital Business Card URL: ${window.location.origin}/cards/${nameSlug}`,
+                        type: 'success',
+                    });
+                    setModalVisible(true);
+                } else {
+                    setModalMessage({
+                        title: 'Error',
+                        message: data.message,
+                        type: 'error',
+                    });
+                    setModalVisible(true);
+                }
+            } else {
+                const errorMessage = await response.text();
+                if (response.status === 413) {
+                    setModalMessage({
+                        title: 'Error',
+                        message: 'Payload too large. Please reduce the size of your images.',
+                        type: 'error',
+                    });
+                } else {
+                    setModalMessage({
+                        title: 'Error',
+                        message: errorMessage || 'An error occurred. Please try again.',
+                        type: 'error',
                     });
                 }
-
-                setModalMessage({
-                    title: 'Success',
-                    message: `Your Digital Business Card URL: ${window.location.origin}/cards/${nameSlug}`,
-                    type: 'success',
-                });
-                setModalVisible(true);
-            } else {
-                setModalMessage({
-                    title: 'Error',
-                    message: data.message,
-                    type: 'error',
-                });
                 setModalVisible(true);
             }
         } catch (error) {
             console.error('Error:', error);
             setModalMessage({
                 title: 'Error',
-                message: 'An error occurred. Please try again.',
+                message: 'An unexpected error occurred. Please try again.',
                 type: 'error',
             });
             setModalVisible(true);
+        } finally {
+            setIsLoading(false); // End loading state
         }
     };
 
@@ -232,12 +266,19 @@ export default function CreateCard({ csrfToken }) {
                     handleProductChange={handleProductChange}
                     removeProductEntry={removeProductEntry}
                     handleCopyLink={handleCopyLink}
-                    />
-
+                />
 
                 {/* Preview Section */}
                 <PreviewComponent previewData={previewData} cardId={cardId} handleCopyLink={handleCopyLink} />
             </div>
+
+            {/* Loading Spinner */}
+            {isLoading && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <Spinner /> {/* Display your Spinner component here */}
+                </div>
+            )}
+
             <CustomModal
                 visible={modalVisible}
                 title={modalMessage.title}
@@ -250,7 +291,6 @@ export default function CreateCard({ csrfToken }) {
                 onClose={closeModal}
                 onProductsUpdate={handleProductsUpdate}
             />
-
         </>
     );
 }

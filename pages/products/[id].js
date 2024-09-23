@@ -1,12 +1,12 @@
-import NotFound from '@/components/NotFound';
-import Spinner from '@/components/Spinner';
-import Image from "next/legacy/image";
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import Image from 'next/legacy/image';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Link from 'next/link';
+import Spinner from '@/components/Spinner';
+import NotFound from '@/components/NotFound';
 
 export default function ProductDetails() {
     const router = useRouter();
@@ -14,54 +14,6 @@ export default function ProductDetails() {
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedPackage, setSelectedPackage] = useState('Basic');
-
-    const demoPrice = 400;
-
-    const demoImages = [
-        { url: '/products/product3.jpg' },
-        { url: '/products/product5.jpg' },
-        { url: '/products/product3.jpg' },
-        { url: '/products/product4.jpg' },
-        { url: '/products/product5.jpg' }
-    ]
-    useEffect(() => {
-        if (id) {
-            fetch(`/api/backed/products/${id}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        setProduct({ ...data.product, images: demoImages });
-                    } else {
-                        console.log(data.message);
-                        setProduct(null);
-                    }
-                    setLoading(false);
-                })
-                .catch((error) => {
-                    console.error('Error fetching product data:', error);
-                    setProduct(null);
-                    setLoading(false);
-                });
-        }
-    }, [id]);
-
-    if (loading) {
-        return <Spinner />;
-    }
-
-    if (!product) {
-        return <NotFound />;
-    }
-
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />
-    };
 
     function SampleNextArrow(props) {
         const { className, style, onClick } = props;
@@ -85,70 +37,108 @@ export default function ProductDetails() {
         );
     }
 
+    useEffect(() => {
+        if (id) {
+            fetch(`/api/backed/products/${id}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        // Assuming data.product.images contains the base64 images
+                        setProduct(data.product);
+                    } else {
+                        setProduct(null);
+                    }
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.error('Error fetching product data:', error);
+                    setProduct(null);
+                    setLoading(false);
+                });
+        }
+    }, [id]);
+
+    if (loading) {
+        return <Spinner />;
+    }
+
+    if (!product) {
+        return <NotFound />;
+    }
+
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
+        vertical: true,
+    };
+
     return (
         <div className="min-h-screen">
             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
                 <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
                     <h1 className="text-3xl font-semibold">{product.name}</h1>
                     <ul>
-                        <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+                        <li className="hover:text-green-500"><Link href="/">Home</Link></li>
                     </ul>
                 </div>
 
                 <div className="container mx-auto p-4">
-                    <div className="flex items-center mb-4">
-                        <div>
-                            <h2 className="font-semibold">{product.name}</h2>
-                            <div className="flex items-center">
-                                <span className="text-yellow-400">★★★★★</span>
-                                <span className="ml-1 text-gray-600">(5.0)</span>
-                            </div>
-                        </div>
-                    </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Carousel */}
                         <div>
-                            <Slider {...settings}>
+                            <Slider {...sliderSettings}>
                                 {product.images.map((image, index) => (
-                                    <div className="border rounded-lg" key={index}>
-                                        <Image src={image.url} width={500} height={500} alt={product.name} className="w-full rounded-lg mb-4" />
+                                    <div key={index} className="border rounded-lg">
+                                        <Image
+                                            src={`${image}`}
+                                            width={500}
+                                            height={500}
+                                            alt={product.name}
+                                            className="w-full rounded-lg mb-4"
+                                        />
                                     </div>
                                 ))}
                             </Slider>
-                            <div className="grid grid-cols-5 gap-2 mt-10 ">
+
+                            {/* Thumbnails */}
+                            <div className="grid grid-cols-5 gap-2 mt-10">
                                 {product.images.map((image, index) => (
-                                    <Image key={index} src={image.url} width={100} height={100} alt={`Thumbnail ${index + 1}`} className="w-full rounded" />
+                                    <Image
+                                        key={index}
+                                        src={`${image}`}
+                                        width={100}
+                                        height={100}
+                                        alt={`Thumbnail ${index + 1}`}
+                                        className="w-full rounded"
+                                    />
                                 ))}
                             </div>
                         </div>
 
+                        {/* Product Info */}
                         <div>
                             <div className="bg-white rounded-lg shadow p-6">
                                 <div className="flex justify-between mb-4">
-                                    <button
-                                        className={`px-4 py-2 rounded ${selectedPackage === 'Basic' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
-                                        onClick={() => setSelectedPackage('Basic')}
-                                    >
-                                        Basic
-                                    </button>
-                                    <button
-                                        className={`px-4 py-2 rounded ${selectedPackage === 'Standard' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
-                                        onClick={() => setSelectedPackage('Standard')}
-                                    >
-                                        Standard
-                                    </button>
-                                    <button
-                                        className={`px-4 py-2 rounded ${selectedPackage === 'Premium' ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
-                                        onClick={() => setSelectedPackage('Premium')}
-                                    >
-                                        Premium
-                                    </button>
+                                    {['Basic', 'Standard', 'Premium'].map((pkg) => (
+                                        <button
+                                            key={pkg}
+                                            className={`px-4 py-2 rounded ${selectedPackage === pkg ? 'bg-gray-800 text-white' : 'bg-gray-200'}`}
+                                            onClick={() => setSelectedPackage(pkg)}
+                                        >
+                                            {pkg}
+                                        </button>
+                                    ))}
                                 </div>
 
-                                <h3 className="text-2xl font-bold mb-2">₦ {demoPrice}</h3>
+                                <h3 className="text-2xl font-bold mb-2">₦ {product.price}</h3>
                                 <p className="text-sm text-gray-600 mb-4">Save up to 10% with Subscribe to Save</p>
 
-                                <h4 className="font-semibold mb-2">{selectedPackage}: Simple Illustration/Portrait</h4>
+                                <h4 className="font-semibold mb-2">{selectedPackage} Package</h4>
                                 <ul className="space-y-2 mb-4">
                                     <li className="flex items-center">
                                         <svg className="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
@@ -171,6 +161,7 @@ export default function ProductDetails() {
                         </div>
                     </div>
 
+                    {/* Product Description */}
                     <div className="mt-8">
                         <h2 className="text-2xl font-bold mb-4">About this product</h2>
                         <p className="text-gray-700 mb-4">{product.description}</p>
