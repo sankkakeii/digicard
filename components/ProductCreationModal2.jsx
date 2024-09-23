@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Image from "next/legacy/image";
 import { X } from 'lucide-react';
-import imageCompression from 'browser-image-compression'; // Import image compression library
+import imageCompression from 'browser-image-compression';
 import Spinner from './Spinner';
 
 const ProductCreationModal = ({ visible, onClose, onProductsUpdate, card }) => {
@@ -14,17 +14,18 @@ const ProductCreationModal = ({ visible, onClose, onProductsUpdate, card }) => {
     const [amount, setAmount] = useState('');
     const [images, setImages] = useState([]);
     const [productUrl, setProductUrl] = useState('');
-    const [isLoading, setIsLoading] = useState(false); // Loading state
+    const [category, setCategory] = useState('');  // New field
+    const [tags, setTags] = useState('');  // New field for comma-separated tags
+    const [isLoading, setIsLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    // Handle image file selection and conversion to base64 with compression
     const handleImageChange = async (e) => {
         const files = Array.from(e.target.files);
         try {
             const compressedImages = await Promise.all(
                 files.map(async (file) => {
                     const compressedFile = await imageCompression(file, {
-                        maxSizeMB: 1, // Set max size to 1MB
+                        maxSizeMB: 1,
                         useWebWorker: true,
                     });
                     return new Promise((resolve, reject) => {
@@ -42,25 +43,25 @@ const ProductCreationModal = ({ visible, onClose, onProductsUpdate, card }) => {
         }
     };
 
-    // Remove a selected image
     const handleRemoveImage = (indexToRemove) => {
         setImages(images.filter((_, index) => index !== indexToRemove));
     };
 
-    // Submit product with images and other details
     const handleSubmit = async () => {
-        if (!productName || !description || !amount || images.length === 0) {
+        if (!productName || !description || !amount || images.length === 0 || !category) {
             setErrorMessage('Please fill in all fields and add at least one image.');
             return;
         }
 
-        setIsLoading(true); // Start loading state
+        setIsLoading(true);
         const newProduct = {
             productName,
             description,
             amount,
             images,
             productUrl,
+            category,  // Include category
+            tags: tags.split(',').map(tag => tag.trim()),  // Convert comma-separated tags into an array
             businessCardId: card.id,
         };
 
@@ -83,6 +84,8 @@ const ProductCreationModal = ({ visible, onClose, onProductsUpdate, card }) => {
                 setAmount('');
                 setImages([]);
                 setProductUrl('');
+                setCategory('');
+                setTags('');
                 setErrorMessage('');
             } else {
                 setErrorMessage(result.message || 'Failed to create product.');
@@ -91,7 +94,7 @@ const ProductCreationModal = ({ visible, onClose, onProductsUpdate, card }) => {
             console.error('Error:', error);
             setErrorMessage('An unexpected error occurred. Please try again.');
         } finally {
-            setIsLoading(false); // End loading state
+            setIsLoading(false);
         }
     };
 
@@ -104,10 +107,10 @@ const ProductCreationModal = ({ visible, onClose, onProductsUpdate, card }) => {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
         >
-            <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative">
+            <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full relative max-h-[90vh] overflow-y-auto">
                 {isLoading && (
                     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                        <Spinner /> {/* Display your Spinner component here */}
+                        <Spinner />
                     </div>
                 )}
                 <div className="flex flex-col items-center">
@@ -128,6 +131,18 @@ const ProductCreationModal = ({ visible, onClose, onProductsUpdate, card }) => {
                         placeholder="Amount"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
+                        className="mb-4"
+                    />
+                    <Input
+                        placeholder="Category"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="mb-4"
+                    />
+                    <Input
+                        placeholder="Tags (comma-separated)"
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
                         className="mb-4"
                     />
                     <Input

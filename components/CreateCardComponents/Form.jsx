@@ -35,8 +35,11 @@ export default function Form({
         <div className="flex-1 lg:pr-5 mb-5 lg:mb-0">
             <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
                 <h1 className="text-3xl font-semibold">Create Your Digital Business Card</h1>
-                <ul>
-                    <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+                <ul className="flex gap-2 items-center justify-center">
+                    {/* <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+                    <li className="hover:text-green-500"><Link href={'/profile/profile'}>Profile</Link></li>
+                    <li className="hover:text-green-500"><Link href={'/directories/products'}>Products</Link></li>
+                    <li className="hover:text-green-500"><Link href={'/directories/business-cards'}>Cards</Link></li> */}
                 </ul>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
