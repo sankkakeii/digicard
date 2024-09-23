@@ -182,8 +182,10 @@ export default function ProfilePage() {
             <div className="bg-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center justify-center mb-8 w-full max-w-4xl">
                 <div className="w-full flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
                     <h1 className="text-3xl font-semibold">Welcome, <span className="text-green-500">{userData?.firstname}</span>!</h1>
-                    <ul>
+                    <ul className="flex gap-2 items-center justify-center">
                         <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+                        <li className="hover:text-green-500"><Link href={'/directories/products'}>Products</Link></li>
+                        <li className="hover:text-green-500"><Link href={'/directories/business-cards'}>Cards</Link></li>
                     </ul>
                 </div>
                 <div className="mb-6">

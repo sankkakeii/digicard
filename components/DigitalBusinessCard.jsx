@@ -123,17 +123,29 @@ END:VCARD`;
                             {card.products && card.products.length > 0 ? (
                                 card.products.map((product) => (
                                     <div key={product.id} className="border rounded-lg bg-white shadow-md">
-                                        <Image
+                                        {/* <Image
                                             src={`/bgp.jpg`} // Replace with your actual image source
                                             width={300}
                                             height={300}
                                             alt="Product Image"
                                             className="object-cover object-center w-full mb-4 rounded-lg"
-                                        />
+                                        /> */}
+
+                                        {product.images.map((image, index) => (
+                                            <div key={index} className="border rounded-lg">
+                                                <Image
+                                                    src={`${image}`}
+                                                    width={500}
+                                                    height={500}
+                                                    alt={product.name}
+                                                    className="object-cover object-center w-full mb-4 rounded-lg"
+                                                />
+                                            </div>
+                                        ))}
                                         <div className="p-4">
                                             <div className="inline-flex justify-between w-full">
                                                 <h1 className="mb-2 text-xl font-semibold leading-none tracking-tighter text-neutral-600">{product.name}</h1>
-                                                <span>₦ {product.price || '400'}</span>
+                                                <span>₦ {product.amount || '400'}</span>
                                             </div>
                                             <p className="mx-auto text-base font-medium leading-relaxed text-gray-500">{product.description}</p>
                                             <a
@@ -215,8 +227,10 @@ END:VCARD`;
             <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-8 w-full max-w-4xl">
                 <div className="w-full flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
                     <h1 className="text-3xl font-semibold">Hi there!, I&apos;m <span className="text-green-500">{card.first_name}</span></h1>
-                    <ul>
+                    <ul className="flex gap-2 items-center justify-center">
                         <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+                        <li className="hover:text-green-500"><Link href={'/directories/products'}>Products</Link></li>
+                        <li className="hover:text-green-500"><Link href={'/directories/business-cards'}>Cards</Link></li>
                     </ul>
                 </div>
                 <div className="mb-6">

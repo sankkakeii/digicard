@@ -82,8 +82,10 @@ export default function ProductDetails() {
             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
                 <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
                     <h1 className="text-3xl font-semibold">{product.name}</h1>
-                    <ul>
-                        <li className="hover:text-green-500"><Link href="/">Home</Link></li>
+                    <ul className="flex gap-2 items-center justify-center">
+                        <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
+                        <li className="hover:text-green-500"><Link href={'/directories/products'}>Products</Link></li>
+                        <li className="hover:text-green-500"><Link href={'/directories/business-cards'}>Cards</Link></li>
                     </ul>
                 </div>
 
@@ -135,7 +137,7 @@ export default function ProductDetails() {
                                     ))}
                                 </div>
 
-                                <h3 className="text-2xl font-bold mb-2">₦ {product.price}</h3>
+                                <h3 className="text-2xl font-bold mb-2">₦ {product.amount}</h3>
                                 <p className="text-sm text-gray-600 mb-4">Save up to 10% with Subscribe to Save</p>
 
                                 <h4 className="font-semibold mb-2">{selectedPackage} Package</h4>
