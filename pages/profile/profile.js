@@ -2,6 +2,7 @@ import Image from "next/legacy/image";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import HeaderComponent from "@/components/HeaderComponent";
 
 export default function ProfilePage() {
     const [activeSection, setActiveSection] = useState('cards');
@@ -180,15 +181,7 @@ export default function ProfilePage() {
     return (
         <div className="min-h-screen w-full p-4 flex flex-col items-center lg:px-20">
             <div className="bg-white rounded-xl shadow-lg p-6 text-center flex flex-col items-center justify-center mb-8 w-full max-w-4xl">
-                <div className="w-full flex justify-between items-center mb-6 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg hover:shadow-xl text-white z-50 p-6">
-                    <h1 className="text-3xl font-semibold">Welcome, <span className="text-green-500">{userData?.firstname}</span>!</h1>
-                    <ul className="flex gap-2 items-center justify-center">
-                        <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/profile/profile'}>Profile</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/directories/products'}>Products</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/directories/business-cards'}>Cards</Link></li>
-                    </ul>
-                </div>
+                <HeaderComponent title={`Welcome, `+ userData?.firstname} />
                 <div className="mb-6">
                     {userData?.profile_picture ? (
                         <Image

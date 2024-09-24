@@ -4,6 +4,7 @@ import Image from "next/legacy/image";
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import HeaderComponent from '@/components/HeaderComponent';
 
 export default function Products() {
     const [products, setProducts] = useState([]);
@@ -74,15 +75,7 @@ export default function Products() {
     return (
         <div className="min-h-screen bg-gray-100">
             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
-                <div className="flex justify-between items-center mb-6 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg shadow-lg text-white p-6">
-                    <h1 className="text-3xl font-bold">Products</h1>
-                    <ul className="flex gap-2 items-center justify-center">
-                        <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/profile/profile'}>Profile</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/directories/products'}>Products</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/directories/business-cards'}>Cards</Link></li>
-                    </ul>
-                </div>
+                <HeaderComponent title="Products" />
 
                 <div className="container mx-auto">
                     {/* Search and Items per page controls */}
