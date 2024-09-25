@@ -11,6 +11,8 @@ export default function DigiCard({ currentUser, csrfToken }) {
     const [modalMessage, setModalMessage] = useState('');
     const [modalType, setModalType] = useState('success');
     const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(false); // Loading state for form submission
+    const [authLoading, setAuthLoading] = useState(false); // Loading state for showing auth popup
 
     const toggleTheme = () => {
         setTheme(prevTheme => {
@@ -31,10 +33,10 @@ export default function DigiCard({ currentUser, csrfToken }) {
     }
 
     useEffect(() => {
-        if(userData == null || userData == undefined && currentUser != null || currentUser != undefined){ 
+        let user = JSON.parse(localStorage.getItem('osunUserData'));
+
+        if (user == null || user == undefined) {
             localStorage.setItem('osunUserData', JSON.stringify(demoData));
-        } else {
-            localStorage.setItem('osunUserData', JSON.stringify(userData));
         }
 
     }, [userData, currentUser]);
@@ -42,12 +44,21 @@ export default function DigiCard({ currentUser, csrfToken }) {
     const showAuthPopup = (loginMode) => {
         setIsLoginMode(loginMode);
         setAuthPopupVisible(true);
+        setAuthLoading(true);  // Start auth loading
+        // Simulating loading effect with a timeout
+        setTimeout(() => {
+            setAuthLoading(false);  // Stop auth loading after delay
+        }, 500);
     };
+    
     const hideAuthPopup = () => setAuthPopupVisible(false);
+    
     const switchAuthMode = () => setIsLoginMode(!isLoginMode);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Start loading spinner when form submission begins
+
         const formData = new FormData(e.target);
         const url = isLoginMode ? '/api/backed/login' : '/api/backed/register';
         try {
@@ -68,6 +79,8 @@ export default function DigiCard({ currentUser, csrfToken }) {
                 }),
             });
             const data = await response.json();
+
+            console.log(data);
             setUserData(data.data);
             setModalTitle(data.success ? 'Success' : 'Error');
             setModalMessage(data.message);
@@ -84,6 +97,8 @@ export default function DigiCard({ currentUser, csrfToken }) {
             setModalMessage('An error occurred. Please try again.');
             setModalType('error');
             setModalVisible(true);
+        } finally {
+            setLoading(false); // Stop loading spinner when request completes
         }
     };
 
@@ -141,59 +156,91 @@ export default function DigiCard({ currentUser, csrfToken }) {
                     <>
                         <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={hideAuthPopup}></div>
                         <div className="fixed w-full max-w-md sm:max-w-lg md:max-w-xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 sm:p-8 rounded-lg shadow-lg z-50 mx-2">
-                            <h2 className="text-xl font-semibold mb-4">{isLoginMode ? 'Login' : 'Register'}</h2>
-                            <form onSubmit={handleSubmit}>
-                                <input type="hidden" name="csrf_token" value={csrfToken} />
-                                <div className="mb-4">
-                                    <label htmlFor="username" className="block text-sm font-medium mb-1">Username:</label>
-                                    <input type="text" id="username" name="username" required className="w-full px-3 py-2 border rounded" />
+                            {authLoading ? (
+                                <div className="flex justify-center items-center h-full">
+                                    <div className="spinner border-t-4 border-blue-500 rounded-full w-12 h-12"></div>
                                 </div>
-                                <div className="mb-4">
-                                    <label htmlFor="password" className="block text-sm font-medium mb-1">Password:</label>
-                                    <input type="password" id="password" name="password" required className="w-full px-3 py-2 border rounded" />
-                                </div>
-                                {!isLoginMode && (
-                                    <>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="mb-4">
-                                                <label htmlFor="firstname" className="block text-sm font-medium mb-1">FirstName:</label>
-                                                <input type="text" id="firstname" name="firstname" required className="w-full px-3 py-2 border rounded" />
-                                            </div>
-                                            <div className="mb-4">
-                                                <label htmlFor="lastname" className="block text-sm font-medium mb-1">LastName:</label>
-                                                <input type="text" id="lastname" name="lastname" required className="w-full px-3 py-2 border rounded" />
-                                            </div>
+                            ) : (
+                                <>
+                                    <h2 className="text-xl font-semibold mb-4">{isLoginMode ? 'Login' : 'Register'}</h2>
+                                    <form onSubmit={handleSubmit}>
+                                        <input type="hidden" name="csrf_token" value={csrfToken} />
+                                        <div className="mb-4">
+                                            <label htmlFor="username" className="block text-sm font-medium mb-1">Username:</label>
+                                            <input type="text" id="username" name="username" required className="w-full px-3 py-2 border rounded" />
                                         </div>
                                         <div className="mb-4">
-                                            <label htmlFor="email" className="block text-sm font-medium mb-1">Email:</label>
-                                            <input type="email" id="email" name="email" required className="w-full px-3 py-2 border rounded" />
+                                            <label htmlFor="password" className="block text-sm font-medium mb-1">Password:</label>
+                                            <input type="password" id="password" name="password" required className="w-full px-3 py-2 border rounded" />
                                         </div>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="mb-4">
-                                                <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone:</label>
-                                                <input type="text" id="phone" name="phone" required className="w-full px-3 py-2 border rounded" />
-                                            </div>
-                                            <div className="mb-4">
-                                                <label htmlFor="address" className="block text-sm font-medium mb-1">Address:</label>
-                                                <input type="text" id="address" name="address" required className="w-full px-3 py-2 border rounded" />
-                                            </div>
+                                        {!isLoginMode && (
+                                            <>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div className="mb-4">
+                                                        <label htmlFor="firstname" className="block text-sm font-medium mb-1">FirstName:</label>
+                                                        <input type="text" id="firstname" name="firstname" required className="w-full px-3 py-2 border rounded" />
+                                                    </div>
+                                                    <div className="mb-4">
+                                                        <label htmlFor="lastname" className="block text-sm font-medium mb-1">LastName:</label>
+                                                        <input type="text" id="lastname" name="lastname" required className="w-full px-3 py-2 border rounded" />
+                                                    </div>
+                                                </div>
+                                                <div className="mb-4">
+                                                    <label htmlFor="email" className="block text-sm font-medium mb-1">Email:</label>
+                                                    <input type="email" id="email" name="email" required className="w-full px-3 py-2 border rounded" />
+                                                </div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div className="mb-4">
+                                                        <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone:</label>
+                                                        <input type="text" id="phone" name="phone" required className="w-full px-3 py-2 border rounded" />
+                                                    </div>
+                                                    <div className="mb-4">
+                                                        <label htmlFor="address" className="block text-sm font-medium mb-1">Address:</label>
+                                                        <input type="text" id="address" name="address" required className="w-full px-3 py-2 border rounded" />
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                        <div className="flex justify-between items-center">
+                                            <button type="button" className="text-blue-500 hover:underline text-sm" onClick={switchAuthMode}>
+                                                {isLoginMode ? 'Switch to Register' : 'Switch to Login'}
+                                            </button>
+                                            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                                {loading ? (
+                                                    <div className="spinner border-t-4 border-white rounded-full w-5 h-5"></div>
+                                                ) : (
+                                                    isLoginMode ? 'Login' : 'Register'
+                                                )}
+                                            </button>
                                         </div>
-                                    </>
-                                )}
-                                <div className="flex justify-between items-center">
-                                    <button type="button" className="text-blue-500 hover:underline text-sm" onClick={switchAuthMode}>
-                                        {isLoginMode ? 'Switch to Register' : 'Switch to Login'}
-                                    </button>
-                                    <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">{isLoginMode ? 'Login' : 'Register'}</button>
-                                </div>
-                            </form>
+                                    </form>
+                                </>
+                            )}
                         </div>
                     </>
                 )}
 
                 <CustomModal visible={modalVisible} title={modalTitle} message={modalMessage} type={modalType} onClose={() => setModalVisible(false)} />
             </div>
+
+            {/* Spinner CSS */}
+            <style jsx>{`
+                .spinner {
+                    border: 4px solid rgba(0, 0, 0, 0.1);
+                    border-radius: 50%;
+                    border-top-color: #3498db;
+                    animation: spin 1s ease infinite;
+                }
+
+                @keyframes spin {
+                    0% {
+                        transform: rotate(0deg);
+                    }
+                    100% {
+                        transform: rotate(360deg);
+                    }
+                }
+            `}</style>
         </>
     );
 }
-
