@@ -13,7 +13,8 @@ export default function ProfilePage() {
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [reference, setReference] = useState(null);
     const [showSubscriptionMessage, setShowSubscriptionMessage] = useState(false);
-
+    const [messages, setMessages] = useState([]);
+    const [loadingMessages, setLoadingMessages] = useState(false);
 
     const router = useRouter();
 
@@ -30,10 +31,10 @@ export default function ProfilePage() {
 
         if (parsedUser && parsedUser.id) {
             fetchCards(parsedUser.id);
+            fetchMessages(parsedUser.id);  // Fetch messages for the user
         }
     }, []);
 
-    // set timer to reset subscription message after 5 seconds
     useEffect(() => {
         if (showSubscriptionMessage) {
             const timer = setTimeout(() => {
@@ -66,12 +67,28 @@ export default function ProfilePage() {
         }
     };
 
+    const fetchMessages = async (creatorId) => {
+        setLoadingMessages(true);
+        try {
+            const response = await fetch(`/api/backed/messaging/get-messages?businessCreatorId=${creatorId}`);
+            const result = await response.json();
+
+            if (result.success) {
+                setMessages(result.messages);
+            } else {
+                setMessages([]);
+            }
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        } finally {
+            setLoadingMessages(false);
+        }
+    };
+
     const handleAddCard = () => {
-        // If user has no cards, allow adding one
         if (cards.length === 0) {
             router.push('/create-card');
         } else {
-            // If user has cards, check subscription status
             if (isSubscribed) {
                 router.push('/create-card');
             } else {
@@ -79,7 +96,6 @@ export default function ProfilePage() {
             }
         }
     };
-    
 
     const handleSubscribe = async () => {
         const reference = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -87,8 +103,6 @@ export default function ProfilePage() {
         setReference(reference);
 
         try {
-            console.log('Subscribing...');
-            console.log(userData);
             const response = await fetch('/api/backed/subscription', {
                 method: 'POST',
                 headers: {
@@ -106,7 +120,6 @@ export default function ProfilePage() {
             const result = await response.json();
 
             if (result.success && result.data.transaction.authorization_url) {
-                console.log('Subscription successful:', result.data.transaction.authorization_url);
                 setSubscriptionData(result);
                 router.push(result.data.transaction.authorization_url);
             } else {
@@ -165,6 +178,33 @@ export default function ProfilePage() {
                     </div>
                 );
 
+            case 'messages':
+                return (
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Messages</h2>
+                        {loadingMessages ? (
+                            <p>Loading messages...</p>
+                        ) : (
+                            <div>
+                                {messages.length > 0 ? (
+                                    <ul className="space-y-4">
+                                        {messages.map((message) => (
+                                            <li key={message.id} className="p-4 border rounded-lg shadow-sm bg-white">
+                                                <p className="text-gray-800">{message.message}</p>
+                                                <p className="text-sm text-gray-500">Product ID: {message.product_id}</p>
+                                                <p className="text-sm text-gray-500">Sent at: {new Date(message.created_at).toLocaleString()}</p>
+                                                <Link href={`/products/${message.product_id}`} className="text-blue-600 cursor-pointer mt-2 w-fit block hover:underline">View Product</Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>No messages found.</p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                );
+
             case 'others':
                 return (
                     <div className="mb-6">
@@ -205,8 +245,7 @@ export default function ProfilePage() {
                 >
                     {isSubscribed ? 'Subscribed' : 'Subscribe Now'}
                 </button>
-    
-                {/* Message if user is not subscribed */}
+
                 {!isSubscribed && showSubscriptionMessage && (
                     <div className="text-center mt-4 bg-red-100 rounded-lg shadow-lg p-4 w-fit">
                         <p className="text-lg text-red-600">Subscribe to get access to premium features.</p>
@@ -223,6 +262,12 @@ export default function ProfilePage() {
                             My Cards
                         </li>
                         <li
+                            className={`cursor-pointer py-2 px-4 text-lg font-medium ${activeSection === 'messages' ? 'text-blue-600 border-b-2 border-blue-600' : ''}`}
+                            onClick={() => setActiveSection('messages')}
+                        >
+                            Messages
+                        </li>
+                        <li
                             className={`cursor-pointer py-2 px-4 text-lg font-medium ${activeSection === 'others' ? 'text-blue-600 border-b-2 border-blue-600' : ''}`}
                             onClick={() => setActiveSection('others')}
                         >
@@ -236,5 +281,4 @@ export default function ProfilePage() {
             </div>
         </div>
     );
-    
 }
