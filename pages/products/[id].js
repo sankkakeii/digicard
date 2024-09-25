@@ -173,10 +173,13 @@ export default function ProductDetails() {
                                         Please send me a message before placing an order!
                                     </p>
                                 </div>
-
+                                {/* 
                                 <button className="w-full bg-black text-white py-3 rounded-lg font-semibold mt-4">
                                     BUY NOW
-                                </button>
+                                </button> */}
+                                <Link href={`/products/purchase?productId=${product.id}`}><button className="w-full bg-black text-white py-3 rounded-lg font-semibold mt-4">
+                                    Proceed to Purchase
+                                </button></Link>
 
                                 <button className="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold mt-4">
                                     Contact me
