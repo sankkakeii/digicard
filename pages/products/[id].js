@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Link from 'next/link';
 import Spinner from '@/components/Spinner';
 import NotFound from '@/components/NotFound';
+import HeaderComponent from '@/components/HeaderComponent';
 
 export default function ProductDetails() {
     const router = useRouter();
@@ -79,15 +80,7 @@ export default function ProductDetails() {
     return (
         <div className="min-h-screen">
             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
-                <div className="flex justify-between items-center mb-6 bg-gray-800 rounded-lg hover:shadow-xl text-white z-50 p-6">
-                    <h1 className="text-3xl font-semibold">{product.name}</h1>
-                    <ul className="flex gap-2 items-center justify-center">
-                        <li className="hover:text-green-500"><Link href={'/'}>Home</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/profile/profile'}>Profile</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/directories/products'}>Products</Link></li>
-                        <li className="hover:text-green-500"><Link href={'/directories/business-cards'}>Cards</Link></li>
-                    </ul>
-                </div>
+                <HeaderComponent title={product.name} />
 
                 <div className="container mx-auto p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -173,17 +166,10 @@ export default function ProductDetails() {
                                         Please send me a message before placing an order!
                                     </p>
                                 </div>
-                                {/* 
-                                <button className="w-full bg-black text-white py-3 rounded-lg font-semibold mt-4">
-                                    BUY NOW
-                                </button> */}
+
                                 <Link href={`/products/purchase?productId=${product.id}`}><button className="w-full bg-black text-white py-3 rounded-lg font-semibold mt-4">
                                     Proceed to Purchase
                                 </button></Link>
-
-                                <button className="w-full border border-gray-300 text-gray-700 py-3 rounded-lg font-semibold mt-4">
-                                    Contact me
-                                </button>
                             </div>
                         </div>
                     </div>

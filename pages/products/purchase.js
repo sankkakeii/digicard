@@ -2,9 +2,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Spinner from '@/components/Spinner';
+import Slider from 'react-slick';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import NotFound from '@/components/NotFound';
 import { v4 as uuidv4 } from 'uuid';
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Copy } from 'lucide-react';
+import Image from 'next/image';
+import HeaderComponent from '@/components/HeaderComponent';
 
 export default function PurchasePage() {
     const router = useRouter();
@@ -125,20 +130,44 @@ export default function PurchasePage() {
         return <NotFound />;
     }
 
+    function SampleNextArrow(props) {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{ ...style, display: "block", background: "gray" }}
+                onClick={onClick}
+            />
+        );
+    }
+
+    function SamplePrevArrow(props) {
+        const { className, style, onClick } = props;
+        return (
+            <div
+                className={className}
+                style={{ ...style, display: "block", background: "gray" }}
+                onClick={onClick}
+            />
+        );
+    }
+
+
+    const sliderSettings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        nextArrow: <SampleNextArrow />,
+        prevArrow: <SamplePrevArrow />,
+        vertical: true,
+    };
+
     return (
         <div className="min-h-screen bg-gray-100">
             <section className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
-                <div className="flex justify-between items-center mb-6 bg-gray-900 rounded-lg shadow-md text-white p-6">
-                    <h1 className="text-3xl font-semibold">Complete Purchase</h1>
-                    <ul className="flex gap-4 items-center">
-                        <li className="hover:text-green-400">
-                            <Link href="/">Home</Link>
-                        </li>
-                        <li className="hover:text-green-400">
-                            <Link href="/directories/products">Products</Link>
-                        </li>
-                    </ul>
-                </div>
+                <HeaderComponent title="Complete Purchase" />
 
                 <div className="container mx-auto p-4 bg-white shadow-lg rounded-lg">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -155,6 +184,22 @@ export default function PurchasePage() {
                                 <Copy size={20} />
                                 Share Product
                             </button>
+
+                            <div className="m-4">
+                                <Slider {...sliderSettings}>
+                                    {product.images.map((image, index) => (
+                                        <div key={index} className="border rounded-lg">
+                                            <Image
+                                                src={`${image}`}
+                                                width={450}
+                                                height={450}
+                                                alt={product.name}
+                                                className="w-full rounded-lg mb-4"
+                                            />
+                                        </div>
+                                    ))}
+                                </Slider>
+                            </div>
                         </div>
 
                         {/* Purchase Info */}
