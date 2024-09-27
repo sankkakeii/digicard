@@ -8,17 +8,20 @@ const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
-        const { username, password } = req.body;
+        const { email, password } = req.body;
+
+
+        console.log(email, password)
 
         try {
             const { data: user, error } = await supabase
                 .from('users')
                 .select('*')
-                .eq('username', username)
+                .eq('email', email)
                 .single()
 
             if (error || !user) {
-                return res.status(401).json({ success: false, message: 'Invalid username or password' })
+                return res.status(401).json({ success: false, message: 'Invalid email or password' })
             }
 
             console.log(user)

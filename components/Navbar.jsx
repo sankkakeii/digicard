@@ -28,10 +28,10 @@ export default function Navbar({ currentUser, showAuthPopup }) {
                         <>
                             <span className="block">Welcome, {currentUser.username}!</span>
                             <Link href="/logout">
-                                <a className="px-4 py-2 text-white bg-red-600 rounded-lg shadow hover:bg-red-700">Logout</a>
+                                <p className="px-4 py-2 text-white bg-red-600 rounded-lg shadow hover:bg-red-700">Logout</p>
                             </Link>
                             <Link href="/create-card">
-                                <a className="px-4 py-2 text-white bg-green-600 rounded-lg shadow hover:bg-green-700">Create Card</a>
+                                <p className="px-4 py-2 text-white bg-green-600 rounded-lg shadow hover:bg-green-700">Create Card</p>
                             </Link>
                         </>
                     ) : (
@@ -56,10 +56,10 @@ export default function Navbar({ currentUser, showAuthPopup }) {
                                 <>
                                     <span className="block">Welcome, {currentUser.username}!</span>
                                     <Link href="/logout">
-                                        <a className="px-4 py-2 text-white bg-red-600 rounded-lg shadow hover:bg-red-700">Logout</a>
+                                        <p className="px-4 py-2 text-white bg-red-600 rounded-lg shadow hover:bg-red-700">Logout</p>
                                     </Link>
                                     <Link href="/create-card">
-                                        <a className="px-4 py-2 text-white bg-green-600 rounded-lg shadow hover:bg-green-700">Create Card</a>
+                                        <p className="px-4 py-2 text-white bg-green-600 rounded-lg shadow hover:bg-green-700">Create Card</p>
                                     </Link>
                                 </>
                             ) : (
