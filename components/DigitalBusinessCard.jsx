@@ -1,12 +1,12 @@
 import Image from "next/legacy/image";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import { FaFileDownload, FaShare, FaEnvelope, FaPhone, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaGithub } from 'react-icons/fa';
 import { Button } from './ui/button';
 import ProductCreationModal from './ProductCreationModal2';
 import QRCode from "qrcode.react";
 import HeaderComponent from "./HeaderComponent";
+import EditCardModal from "./EditCardModal";
 
 export default function DigitalBusinessCard({ card }) {
     const [activeSection, setActiveSection] = useState('about');
@@ -14,6 +14,21 @@ export default function DigitalBusinessCard({ card }) {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [products, setProducts] = useState([]);
     const router = useRouter();
+
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false); // State for edit modal
+    const [updatedCard, setUpdatedCard] = useState(card); // Card state to update
+
+    const openEditModal = () => {
+        setIsEditModalVisible(true);
+    };
+
+    const closeEditModal = () => {
+        setIsEditModalVisible(false);
+    };
+
+    const handleSaveCard = (updatedData) => {
+        setUpdatedCard({ ...updatedCard, ...updatedData });
+    };
 
     const downloadVCard = () => {
         const vcard = `BEGIN:VCARD
@@ -270,6 +285,17 @@ END:VCARD`;
                             <FaShare className="mr-2" />
                             Share
                         </button>
+
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center">
+                        <button
+                            onClick={openEditModal}
+                            className="m-2 p-2 bg-blue-500 text-white rounded transition duration-300 hover:bg-blue-700 flex items-center justify-center"
+                        >
+                            <FaShare className="mr-2" />
+                            Edit
+                        </button>
                     </div>
                 </div>
             </div>
@@ -306,6 +332,13 @@ END:VCARD`;
                 onClose={closeModal}
                 onProductsUpdate={handleProductsUpdate}
                 card={card}
+            />
+
+            <EditCardModal
+                visible={isEditModalVisible}
+                onClose={closeEditModal}
+                card={card}
+                onSave={handleSaveCard}
             />
         </div>
     );
