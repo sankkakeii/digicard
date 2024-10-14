@@ -167,7 +167,8 @@ export default function ProductDetails() {
                                     </p>
                                 </div>
 
-                                <Link href={`/products/purchase?productId=${product.id}`}><button className="w-full bg-black text-white py-3 rounded-lg font-semibold mt-4">
+                                {/* <Link href={`/products/purchase?productId=${product.id}`}><button className="w-full bg-black text-white py-3 rounded-lg font-semibold mt-4"> */}
+                                <Link href={`/escrow/escrow-initiate?productId=${product.id}`}><button className="w-full bg-green-500 text-white py-3 rounded-lg font-semibold mt-4">
                                     Proceed to Purchase
                                 </button></Link>
                             </div>

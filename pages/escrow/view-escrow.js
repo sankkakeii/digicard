@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,11 +8,19 @@ import NotFound from '@/components/NotFound';
 
 const ViewEscrowPage = () => {
     const router = useRouter();
+    const { txnId } = router.query; // Get txnId from the URL
     const [buyerId, setBuyerId] = useState('');
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        if (txnId) {
+            setBuyerId(txnId); // Set buyerId with the value from txnId in the URL
+        }
+    }, [txnId]); // Run this effect whenever txnId changes
+
+    // Fetch transaction data by buyer ID
     const fetchTransactionData = async () => {
         if (!buyerId) return; // Do not proceed if no buyerId is provided
 
@@ -28,16 +36,12 @@ const ViewEscrowPage = () => {
             });
             const data = await response.json();
 
-            console.log('Transaction data:', data);
-
             if (data.success) {
                 setTransactions(data.data); // Set transactions as an array
             } else {
-                console.error('Failed to fetch transactions:', data.message);
                 setTransactions([]);
             }
         } catch (error) {
-            console.error('Error fetching transaction data:', error);
             setTransactions([]);
             setError('Error fetching transaction data. Please try again.');
         } finally {
@@ -49,30 +53,31 @@ const ViewEscrowPage = () => {
         fetchTransactionData();
     };
 
+    // Buyer can only approve buyer-specific milestones
     const handleApproveMilestone = async (transactionId, milestoneId, actor) => {
-        // Ensure the buyer can only approve buyer milestones
         if (actor !== 'buyer') {
             alert("You are not authorized to approve this milestone.");
             return;
         }
 
         try {
-            const response = await fetch('/api/escrow/update-milestone', {
+            const response = await fetch('/api/escrow/buyer-update-milestone', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    buyerId,
                     transactionId,
                     milestoneId,
                     status: 'completed',
-                    action: 'approved',
+                    action: 'approved by buyer',
                 }),
             });
 
             const data = await response.json();
             if (data.success) {
-                // Update the transactions state to reflect the change
+                // Update the transactions state to reflect the milestone update
                 setTransactions((prevTransactions) =>
                     prevTransactions.map((transaction) =>
                         transaction._id === transactionId
@@ -181,11 +186,6 @@ const ViewEscrowPage = () => {
                                 ))
                             )}
                         </CardContent>
-                        <CardFooter className="flex flex-col items-center">
-                            <Button className="w-full mb-4 bg-gray-600 text-white hover:bg-gray-500 transition duration-200">
-                                View Details
-                            </Button>
-                        </CardFooter>
                     </Card>
                 ))}
             </div>

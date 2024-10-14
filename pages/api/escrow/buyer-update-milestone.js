@@ -1,4 +1,4 @@
-// escrow/update-milestone.js
+// escrow/buyer-update-milestone.js
 
 export default async function handler(req, res) {
     if (req.method !== 'PUT') {
@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { transactionId, milestoneId, status, action } = req.body;
+        const { transactionId, milestoneId, status, action, buyerId } = req.body;
 
         // Validate request data (simple validation)
         if (!transactionId || !milestoneId || !status || !action) {
@@ -18,10 +18,11 @@ export default async function handler(req, res) {
             milestoneId,
             status,
             action,
+            buyerId,
         };
 
         // Make the external API call to update the milestone
-        const response = await fetch(`${process.env.NEXT_ESCROW_URL}/milestone/${transactionId}`, {
+        const response = await fetch(`${process.env.NEXT_ESCROW_URL}/transactions/milestone/buyer/${transactionId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -34,12 +35,11 @@ export default async function handler(req, res) {
 
         // Check if the response from the external API was successful
         if (!response.ok) {
-            return res.status(response.status).json({ success: false, message: data.message || 'Failed to update milestone' });
+            return res.status(response.status).json({ success: false, message: data.msg || 'Failed to update milestone' });
         }
 
         return res.status(200).json({ success: true, message: 'Milestone updated successfully', data });
     } catch (error) {
-        console.log('ERROR::::', error);
         return res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 }

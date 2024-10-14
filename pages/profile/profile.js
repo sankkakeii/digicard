@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import HeaderComponent from "@/components/HeaderComponent";
+import TransactionModal from "@/components/ProfileTransactionModal";
 
 export default function ProfilePage() {
     const [activeSection, setActiveSection] = useState('cards');
@@ -15,6 +16,10 @@ export default function ProfilePage() {
     const [showSubscriptionMessage, setShowSubscriptionMessage] = useState(false);
     const [messages, setMessages] = useState([]);
     const [loadingMessages, setLoadingMessages] = useState(false);
+    const [transactions, setTransactions] = useState([]);
+    const [loadingTransactions, setLoadingTransactions] = useState(false);
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const router = useRouter();
 
@@ -49,6 +54,70 @@ export default function ProfilePage() {
             localStorage.setItem('reference', reference);
         }
     }, [reference]);
+
+    useEffect(() => {
+        if (activeSection === 'transactions' && userData?.id) {
+            fetchTransactions(userData.id);
+        }
+    }, [activeSection, userData]);
+
+
+    const handleViewTransaction = (transaction) => {
+        setSelectedTransaction(transaction);
+        setIsModalOpen(true);
+    };
+
+
+
+
+    const handleUpdateMilestone = async (transactionId, milestoneId, sellerId) => {
+        try {
+            const response = await fetch('/api/escrow/seller-update-milestone', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    sellerId,
+                    transactionId,
+                    milestoneId,
+                    status: 'completed',
+                    action: 'marked by seller',
+                }),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                setSelectedTransaction((prevTransaction) => ({
+                    ...prevTransaction,
+                    milestones: prevTransaction.milestones.map((milestone) =>
+                        milestone._id === milestoneId ? { ...milestone, status: 'completed' } : milestone
+                    ),
+                }));
+            }
+        } catch (error) {
+            console.error('Error updating milestone:', error);
+        }
+    };
+
+    const fetchTransactions = async (userId) => {
+        setLoadingTransactions(true);
+        try {
+            const response = await fetch(`/api/escrow/transactions-type-id/${userId}`);
+            console.log('here')
+            const result = await response.json();
+
+            if (result.success) {
+                setTransactions(result.data);
+            } else {
+                setTransactions([]);
+            }
+        } catch (error) {
+            console.error('Error fetching transactions:', error);
+        } finally {
+            setLoadingTransactions(false);
+        }
+    };
 
     const fetchCards = async (creatorId) => {
         try {
@@ -213,6 +282,39 @@ export default function ProfilePage() {
                     </div>
                 );
 
+            case 'transactions':
+                return (
+                    <div className="mb-6">
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-2">My Transactions</h2>
+                        {loadingTransactions ? (
+                            <p>Loading transactions...</p>
+                        ) : (
+                            <div>
+                                {transactions.length > 0 ? (
+                                    <ul className="space-y-4">
+                                        {transactions.map((transaction) => (
+                                            <li key={transaction.id} className="p-4 border rounded-lg shadow-sm bg-white">
+                                                <p className="text-gray-800">Product: {transaction.product.name}</p>
+                                                <p className="text-sm text-gray-800">Transaction ID: {transaction._id}</p>
+                                                <p className="text-sm text-gray-500">Amount: {transaction.amount}</p>
+                                                <p className="text-sm text-gray-500">Status: {transaction.status}</p>
+                                                <p
+                                                    onClick={() => handleViewTransaction(transaction)}
+                                                    className="mt-2 text-blue-600 hover:underline"
+                                                >
+                                                    View Details
+                                                </p>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>No transactions found.</p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                );
+
             default:
                 return null;
         }
@@ -268,6 +370,12 @@ export default function ProfilePage() {
                             Messages
                         </li>
                         <li
+                            className={`cursor-pointer py-2 px-4 text-lg font-medium ${activeSection === 'transactions' ? 'text-blue-600 border-b-2 border-blue-600' : ''}`}
+                            onClick={() => setActiveSection('transactions')}
+                        >
+                            Transactions
+                        </li>
+                        <li
                             className={`cursor-pointer py-2 px-4 text-lg font-medium ${activeSection === 'others' ? 'text-blue-600 border-b-2 border-blue-600' : ''}`}
                             onClick={() => setActiveSection('others')}
                         >
@@ -278,7 +386,18 @@ export default function ProfilePage() {
                 <div className="w-full lg:w-3/4 bg-white rounded-xl shadow-lg p-6 lg:ml-4">
                     {renderSectionContent()}
                 </div>
+
+                           {/* Render the modal and pass transaction data */}
+            {selectedTransaction && (
+                <TransactionModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    transaction={selectedTransaction}
+                    handleUpdateMilestone={handleUpdateMilestone}
+                />
+            )}
             </div>
+
         </div>
     );
 }

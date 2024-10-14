@@ -31,7 +31,8 @@ export default function HeaderComponent({ title }) {
                     <li className="hover:text-green-300 p-2"><Link href="/profile/profile">Profile</Link></li>
                     <li className="hover:text-green-300 p-2"><Link href="/directories/products">Products</Link></li>
                     <li className="hover:text-green-300 p-2"><Link href="/directories/business-cards">Cards</Link></li>
-                    <li className="hover:text-green-300 p-2"><Link href="/escrow/escrow-initiate?productId=16">Escrow</Link></li>
+                    <li className="hover:text-green-300 p-2"><Link href="/escrow/view-escrow">View Escrow</Link></li>
+                    {/* <li className="hover:text-green-300 p-2"><Link href="/escrow/escrow-initiate?productId=5">Escrow</Link></li> */}
                 </ul>
             </nav>
         </header>

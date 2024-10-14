@@ -18,6 +18,17 @@ const EscrowPurchasePage = () => {
     // New state for buyer's name and phone number
     const [buyerEmail, setBuyerEmail] = useState('');
     const [buyerPhone, setBuyerPhone] = useState('');
+    const [sellerEmail, setSellerEmail] = useState('');
+
+    const [userId, setUserId] = useState(null);
+
+    // get user data from local storage
+    useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem('osunUserData'));
+        if (userData) {
+            setUserId(userData.id);
+        }
+    }, []);
 
     useEffect(() => {
         if (productId) {
@@ -26,6 +37,7 @@ const EscrowPurchasePage = () => {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.success) {
+                        console.log(data.product)
                         setProduct(data.product);
                     } else {
                         setProduct(null);
@@ -38,10 +50,13 @@ const EscrowPurchasePage = () => {
                     setLoading(false);
                 });
         }
+
+        // fetch seller email from local storage
+        const sellerEmail = JSON.parse(localStorage.getItem('osunUserData')).email;
+        setSellerEmail(sellerEmail);
     }, [productId]);
 
     const initiateEscrow = () => {
-
         // Convert amount string to number
         let amountConverted;
         const amountArray = product.amount.split(',');
@@ -49,11 +64,14 @@ const EscrowPurchasePage = () => {
             amountConverted = Number(amountArray[0] + amountArray[1] + amountArray[2]);
         }
 
+
         // Create the transaction payload with buyer name and phone number
         const transactionPayload = {
-            buyerId : buyerEmail,
             buyerEmail, // Added buyer email
             buyerPhone, // Added buyer phone
+            sellerId: product.creator_id,
+            sellerEmail,
+            buyerId: buyerEmail,
             product: {
                 name: product.name,
                 description: product.description,
@@ -88,7 +106,7 @@ const EscrowPurchasePage = () => {
     };
 
     const handleRedirect = () => {
-            router.push(`/escrow/view-escrow`);
+        router.push(`/escrow/view-escrow`);
     };
 
     if (loading) {
@@ -140,12 +158,16 @@ const EscrowPurchasePage = () => {
                         {/* Buyer Email and Phone Number Input Fields */}
                         <div className="mb-6">
                             <h3 className="text-lg font-semibold mb-2 text-gray-800">Buyer Information</h3>
+                            <p className="text-gray-600 mb-2">
+                                Please provide your email and phone number to receive notifications regarding your escrow transaction.
+                            </p>
                             <input
                                 type="email"
                                 placeholder="Enter your email"
                                 value={buyerEmail}
                                 onChange={(e) => setBuyerEmail(e.target.value)}
                                 className="border border-gray-300 rounded-md p-2 w-full mb-4"
+                                required
                             />
                             <input
                                 type="phone"
@@ -153,6 +175,7 @@ const EscrowPurchasePage = () => {
                                 value={buyerPhone}
                                 onChange={(e) => setBuyerPhone(e.target.value)}
                                 className="border border-gray-300 rounded-md p-2 w-full"
+                                required
                             />
                         </div>
                     </CardContent>
@@ -177,4 +200,3 @@ const EscrowPurchasePage = () => {
 };
 
 export default EscrowPurchasePage;
-

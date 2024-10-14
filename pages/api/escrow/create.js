@@ -4,13 +4,13 @@ export default async function handler(req, res) {
         return res.status(405).json({ success: false, message: 'Method Not Allowed' });
     }
 
-    console.log(process.env.NEXT_ESCROW_API_KEY)
-
     try {
         const {
             buyerId,
             buyerPhone,
             buyerEmail,
+            sellerId,
+            sellerEmail,
             product,
             amount,
             currency,
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         console.log('req.body', req.body)
 
         // Validate request data (simple validation)
-        if (!buyerId || !buyerPhone || !buyerEmail || !product || !amount || !currency || !transactionType) {
+        if (!buyerId || !buyerPhone || !buyerEmail || !sellerId || !sellerEmail || !product || !amount || !currency || !transactionType) {
             return res.status(400).json({ success: false, message: 'Missing required fields' });
         }
 
@@ -29,6 +29,8 @@ export default async function handler(req, res) {
             buyerId,
             buyerPhone,
             buyerEmail,
+            sellerId,
+            sellerEmail,
             product,
             amount,
             currency,

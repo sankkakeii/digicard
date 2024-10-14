@@ -6,6 +6,8 @@ export default async function handler(req, res) {
 
     const { id } = req.body; // Get ID from the POST body
 
+    console.log('here', id);
+
     try {
         // Make the external API call to fetch the transaction by ID
         const response = await fetch(`${process.env.NEXT_ESCROW_URL}/transactions/transactions/${id}`, {
@@ -16,6 +18,8 @@ export default async function handler(req, res) {
         });
 
         const data = await response.json();
+
+        console.log('data', data);
 
         // Check if the response from the external API was successful
         if (!response.ok) {
