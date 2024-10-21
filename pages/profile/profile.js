@@ -300,7 +300,7 @@ export default function ProfilePage() {
                                                 <p className="text-sm text-gray-500">Status: {transaction.status}</p>
                                                 <p
                                                     onClick={() => handleViewTransaction(transaction)}
-                                                    className="mt-2 text-blue-600 hover:underline"
+                                                    className="mt-2 text-blue-600 hover:underline hover:cursor-pointer"
                                                 >
                                                     View Details
                                                 </p>

@@ -1,10 +1,9 @@
-// components/TransactionModal.js
 import { Button } from "@/components/ui/button";
 
 const TransactionModal = ({ isOpen, onClose, transaction, handleUpdateMilestone }) => {
     if (!isOpen) return null;
 
-    console.log(transaction)
+    console.log(transaction);
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -32,11 +31,24 @@ const TransactionModal = ({ isOpen, onClose, transaction, handleUpdateMilestone 
                     transaction.milestones.map((milestone) => (
                         <div
                             key={milestone._id}
-                            className={`border p-4 mb-4 rounded-md ${milestone.status === "completed" ? "bg-green-100" : "bg-gray-100"}`}
+                            className={`border p-4 mb-4 rounded-md transition duration-300 ${
+                                milestone.status === "completed"
+                                    ? "bg-green-100 border-green-300"
+                                    : "bg-gray-100 border-gray-300"
+                            }`}
                         >
-                            <h4 className="font-bold">{milestone.title}</h4>
+                            <h4 className="font-bold">
+                                {milestone.title}{" "}
+                                {milestone.status === "completed" && (
+                                    <span className="text-green-600 ml-2">✔️</span>
+                                )}
+                            </h4>
                             <p>{milestone.description || "No description available."}</p>
-                            <p className="text-gray-600">Status: {milestone.status}</p>
+                            <p className={`font-semibold mt-2 bg-green-300 rounded-md w-full py-3 pl-1 ${
+                                milestone.status === "completed" ? "text-green-700" : "text-gray-700"
+                            }`}>
+                                Status: {milestone.status}
+                            </p>
                             <p className="text-gray-600">
                                 Due Date: {milestone.dueDate ? new Date(milestone.dueDate).toLocaleDateString() : "Not set"}
                             </p>
@@ -44,8 +56,7 @@ const TransactionModal = ({ isOpen, onClose, transaction, handleUpdateMilestone 
                             {milestone.actor === "seller" && milestone.status !== "completed" && (
                                 <Button
                                     onClick={() => handleUpdateMilestone(transaction._id, milestone._id, transaction.sellerId)}
-                                    // onClick={() => console.log(transaction._id, milestone._id)}
-                                    className="mt-2 bg-blue-600 text-white"
+                                    className="mt-2 bg-blue-600 text-white hover:bg-blue-700 transition duration-200"
                                 >
                                     Mark as Completed
                                 </Button>

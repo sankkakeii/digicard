@@ -161,7 +161,7 @@ const ViewEscrowPage = () => {
                                         <p className="text-sm text-gray-600">
                                             {milestone.description || 'No description provided.'}
                                         </p>
-                                        <p className={`text-sm font-semibold mt-2 ${milestone.status === 'completed' ? 'text-green-700' : 'text-gray-700'}`}>
+                                        <p className={`text-sm font-semibold mt-2 ${milestone.status === 'completed' ? 'text-green-700 bg-green-300 rounded-md w-full py-3 pl-1' : 'text-gray-700'}`}>
                                             Status: {milestone.status}
                                         </p>
                                         <p className="text-sm text-gray-500">
